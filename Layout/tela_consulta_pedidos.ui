@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1370</width>
+    <height>683</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="pedidos_nro_pedido">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>130</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_total_pedido">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>520</y>
+      <width>230</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="pedidos_tabela_pedidos">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>130</y>
+      <width>791</width>
+      <height>511</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_nome_operador">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>190</y>
+      <width>261</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pedidos_limpar_filtros">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>80</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Limpar Filtros</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_label_datahora">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>220</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Data e hora: </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_label_produtos">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>260</y>
+      <width>490</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Produtos do pedido</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_label_operador">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>190</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Operador:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_label_cliente">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>160</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Cliente: </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_label_total_pedido">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>520</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Total do pedido: </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_label_nro">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>130</y>
+      <width>181</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Nº do pedido: </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_nome_cliente">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>160</y>
+      <width>261</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pedidos_datahora">
+    <property name="geometry">
+     <rect>
+      <x>1090</x>
+      <y>220</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pedidos_filtrar">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>80</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Filtros</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="pedidos_tabela_produtos">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>820</x>
+      <y>290</y>
+      <width>530</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="clientes_label_cadastro_clientes">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>1371</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Calibri</family>
+      <pointsize>28</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Consulta de pedidos</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1370</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_vendas">
+    <property name="title">
+     <string>Vendas</string>
+    </property>
+    <addaction name="acao_realizar_venda"/>
+    <addaction name="acao_consultar_vendas"/>
+    <addaction name="acao_relatorio_vendas"/>
+   </widget>
+   <widget class="QMenu" name="menu_produtos">
+    <property name="title">
+     <string>Produtos</string>
+    </property>
+    <addaction name="acao_cadastrar_produtos"/>
+    <addaction name="acao_estoque_produtos"/>
+    <addaction name="acao_relatorio_produtos"/>
+   </widget>
+   <widget class="QMenu" name="menu_configuracoes">
+    <property name="title">
+     <string>Configurações</string>
+    </property>
+    <addaction name="acao_predefinicoes"/>
+    <addaction name="acao_sobre"/>
+   </widget>
+   <widget class="QMenu" name="menuFornecedores">
+    <property name="title">
+     <string>Fornecedores</string>
+    </property>
+    <addaction name="acao_cadastro_forn"/>
+    <addaction name="acao_consulta_forn"/>
+    <addaction name="acao_relatorios_forn"/>
+   </widget>
+   <widget class="QMenu" name="menuClientes">
+    <property name="title">
+     <string>Clientes</string>
+    </property>
+    <addaction name="acao_cadastro_clientes"/>
+    <addaction name="acao_consulta_clientes"/>
+    <addaction name="acao_relatorios_clientes"/>
+   </widget>
+   <widget class="QMenu" name="menuOrdens_de_Servi_o">
+    <property name="title">
+     <string>Ordens de Serviço</string>
+    </property>
+    <addaction name="acao_nova_os"/>
+    <addaction name="acao_consulta_os"/>
+    <addaction name="acao_relatorios_os"/>
+   </widget>
+   <addaction name="menu_vendas"/>
+   <addaction name="menu_produtos"/>
+   <addaction name="menu_configuracoes"/>
+   <addaction name="menuFornecedores"/>
+   <addaction name="menuClientes"/>
+   <addaction name="menuOrdens_de_Servi_o"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="acao_realizar_venda">
+   <property name="text">
+    <string>Realizar Venda</string>
+   </property>
+  </action>
+  <action name="acao_consultar_vendas">
+   <property name="text">
+    <string>Consultar Vendas</string>
+   </property>
+  </action>
+  <action name="acao_relatorio_vendas">
+   <property name="text">
+    <string>Relatório de vendas</string>
+   </property>
+  </action>
+  <action name="acao_cadastrar_produtos">
+   <property name="text">
+    <string>Cadastrar produtos</string>
+   </property>
+  </action>
+  <action name="acao_estoque_produtos">
+   <property name="text">
+    <string>Estoque de produtos</string>
+   </property>
+  </action>
+  <action name="acao_relatorio_produtos">
+   <property name="text">
+    <string>Relatório de produtos</string>
+   </property>
+  </action>
+  <action name="acao_predefinicoes">
+   <property name="text">
+    <string>Predefinições</string>
+   </property>
+  </action>
+  <action name="acao_sobre">
+   <property name="text">
+    <string>Sobre</string>
+   </property>
+  </action>
+  <action name="acao_cadastro_forn">
+   <property name="text">
+    <string>Cadastro</string>
+   </property>
+  </action>
+  <action name="acao_consulta_forn">
+   <property name="text">
+    <string>Consulta</string>
+   </property>
+  </action>
+  <action name="acao_cadastro_clientes">
+   <property name="text">
+    <string>Cadastro</string>
+   </property>
+  </action>
+  <action name="acao_consulta_clientes">
+   <property name="text">
+    <string>Consulta</string>
+   </property>
+  </action>
+  <action name="acao_nova_os">
+   <property name="text">
+    <string>Nova O.S.</string>
+   </property>
+  </action>
+  <action name="acao_consulta_os">
+   <property name="text">
+    <string>Consulta</string>
+   </property>
+  </action>
+  <action name="acao_relatorios_os">
+   <property name="text">
+    <string>Relatório de O.S.</string>
+   </property>
+  </action>
+  <action name="acao_relatorios_clientes">
+   <property name="text">
+    <string>Relatorio de clientes</string>
+   </property>
+  </action>
+  <action name="acao_relatorios_forn">
+   <property name="text">
+    <string>Relatório de fornecedores</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1370</width>
+    <height>683</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label_pixmap">
+    <property name="geometry">
+     <rect>
+      <x>-10</x>
+      <y>-30</y>
+      <width>1410</width>
+      <height>700</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Calibri</family>
+      <pointsize>28</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>PIXMAP</string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1370</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_vendas">
+    <property name="title">
+     <string>Vendas</string>
+    </property>
+    <addaction name="acao_realizar_venda"/>
+    <addaction name="acao_consultar_vendas"/>
+    <addaction name="acao_relatorio_vendas"/>
+   </widget>
+   <widget class="QMenu" name="menu_produtos">
+    <property name="title">
+     <string>Produtos</string>
+    </property>
+    <addaction name="acao_cadastrar_produtos"/>
+    <addaction name="acao_estoque_produtos"/>
+    <addaction name="acao_relatorio_produtos"/>
+   </widget>
+   <widget class="QMenu" name="menu_configuracoes">
+    <property name="title">
+     <string>Configurações</string>
+    </property>
+    <addaction name="acao_predefinicoes"/>
+    <addaction name="acao_sobre"/>
+   </widget>
+   <widget class="QMenu" name="menuFornecedores">
+    <property name="title">
+     <string>Fornecedores</string>
+    </property>
+    <addaction name="acao_cadastro_forn"/>
+    <addaction name="acao_consulta_forn"/>
+    <addaction name="acao_relatorios_forn"/>
+   </widget>
+   <widget class="QMenu" name="menuClientes">
+    <property name="title">
+     <string>Clientes</string>
+    </property>
+    <addaction name="acao_cadastro_clientes"/>
+    <addaction name="acao_consulta_clientes"/>
+    <addaction name="acao_relatorios_clientes"/>
+   </widget>
+   <widget class="QMenu" name="menuOrdens_de_Servi_o">
+    <property name="title">
+     <string>Ordens de Serviço</string>
+    </property>
+    <addaction name="acao_nova_os"/>
+    <addaction name="acao_consulta_os"/>
+    <addaction name="acao_relatorios_os"/>
+   </widget>
+   <addaction name="menu_vendas"/>
+   <addaction name="menu_produtos"/>
+   <addaction name="menu_configuracoes"/>
+   <addaction name="menuFornecedores"/>
+   <addaction name="menuClientes"/>
+   <addaction name="menuOrdens_de_Servi_o"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="acao_realizar_venda">
+   <property name="text">
+    <string>Realizar Venda</string>
+   </property>
+  </action>
+  <action name="acao_consultar_vendas">
+   <property name="text">
+    <string>Consultar Vendas</string>
+   </property>
+  </action>
+  <action name="acao_relatorio_vendas">
+   <property name="text">
+    <string>Relatório de vendas</string>
+   </property>
+  </action>
+  <action name="acao_cadastrar_produtos">
+   <property name="text">
+    <string>Cadastrar produtos</string>
+   </property>
+  </action>
+  <action name="acao_estoque_produtos">
+   <property name="text">
+    <string>Estoque de produtos</string>
+   </property>
+  </action>
+  <action name="acao_relatorio_produtos">
+   <property name="text">
+    <string>Relatório de produtos</string>
+   </property>
+  </action>
+  <action name="acao_predefinicoes">
+   <property name="text">
+    <string>Predefinições</string>
+   </property>
+  </action>
+  <action name="acao_sobre">
+   <property name="text">
+    <string>Sobre</string>
+   </property>
+  </action>
+  <action name="acao_cadastro_forn">
+   <property name="text">
+    <string>Cadastro</string>
+   </property>
+  </action>
+  <action name="acao_consulta_forn">
+   <property name="text">
+    <string>Consulta</string>
+   </property>
+  </action>
+  <action name="acao_cadastro_clientes">
+   <property name="text">
+    <string>Cadastro</string>
+   </property>
+  </action>
+  <action name="acao_consulta_clientes">
+   <property name="text">
+    <string>Consulta</string>
+   </property>
+  </action>
+  <action name="acao_nova_os">
+   <property name="text">
+    <string>Nova O.S.</string>
+   </property>
+  </action>
+  <action name="acao_consulta_os">
+   <property name="text">
+    <string>Consulta</string>
+   </property>
+  </action>
+  <action name="acao_relatorios_os">
+   <property name="text">
+    <string>Relatório de O.S.</string>
+   </property>
+  </action>
+  <action name="acao_relatorios_clientes">
+   <property name="text">
+    <string>Relatorio de clientes</string>
+   </property>
+  </action>
+  <action name="acao_relatorios_forn">
+   <property name="text">
+    <string>Relatório de fornecedores</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="imagens.qrc"/>
+ </resources>
+ <connections/>
+</ui>

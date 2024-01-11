@@ -1,0 +1,366 @@
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget, QMessageBox
+from PySide6.QtCore import Qt, QTimer
+import sys, json,datetime
+
+
+
+versao = "1.0"
+data_e_hora_atuais = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+mensagem_status = f"{data_e_hora_atuais} - Sistema - Versão {versao} - Em desenvolvimento por: John H."
+
+# Definindo o atributo antes de criar a QApplication
+QApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.loader = QUiLoader()
+        self.atualizar_layout_inicial()
+        self.resize(1425,700)
+        
+        #BARRA DE STATUS =============================================================================================
+        barra_status = self.statusBar()
+        data_e_hora_atuais = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        barra_status.showMessage(mensagem_status)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.atualizar_hora)
+        self.timer.start(1) # Timer definido para 1000 ms (1 segundo)
+        fonte_barra_status = barra_status.font()
+        fonte_barra_status.setPointSize(10)
+        fonte_barra_status.setBold(True)
+        barra_status.setFont(fonte_barra_status)
+        
+        ## Gravar produtos temporários
+        
+        self.gravar_produtos_temporarios()
+        
+        
+##############################################################################################################        
+        
+    def config_padrao(self):
+        
+        if hasattr(self.ui, 'botao_home'):
+            self.ui.botao_home.disconnect(self)
+            self.ui.botao_home.clicked.connect(self.atualizar_layout_inicial)
+
+        # Sinais
+        if hasattr(self.ui, 'acao_estoque_produtos'):
+            self.ui.acao_estoque_produtos.disconnect(self)
+            self.ui.acao_estoque_produtos.triggered.connect(self.atualizar_layout_estoque_produtos)
+        
+        if hasattr(self.ui, 'acao_realizar_venda'):
+            self.ui.acao_realizar_venda.disconnect(self)
+            self.ui.acao_realizar_venda.triggered.connect(self.atualizar_layout_realizar_vendas)
+            
+        # Definir atalhos
+        if hasattr(self.ui, 'acao_realizar_venda'):
+            self.ui.acao_realizar_venda.setShortcut('F1')
+        
+        if hasattr(self.ui, 'acao_estoque_produtos'):
+            self.ui.acao_estoque_produtos.setShortcut('F2')
+            
+    def atualizar_hora(self):
+        data_e_hora_atuais = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        mensagem_status = f"{data_e_hora_atuais} - Sistema - Versão {versao} - Em desenvolvimento por: John H."
+        self.statusBar().showMessage(mensagem_status)   
+##############################################################################################################
+
+    def atualizar_layout_inicial(self):
+        self.ui = self.loader.load("Layout/tela_inicial.ui")
+        self.setCentralWidget(self.ui)
+        self.setWindowTitle("Sistema de Vendas")
+        
+        self.config_padrao()
+         
+        
+    def atualizar_layout_realizar_vendas(self):
+        self.ui = self.loader.load("Layout/tela_realizar_venda.ui")
+        self.setCentralWidget(self.ui)
+        self.setWindowTitle("Sistema de Vendas - Realizar Venda")
+        
+        self.config_padrao()
+        self.ler_pedido_temporario()
+        
+        def atualizar_dados_produto(self, codigo):
+            
+            produtos = self.listar_produtos()
+                
+            for produto in produtos:
+                if produto[0] == str(codigo):
+                    self.ui.vendas_nome_produto.setText(produto[1])
+                    self.ui.vendas_valor_produto.setText(f"R$ {produto[5]}".replace(".", ","))
+                    self.ui.vendas_qtd_estoque.setText(str(produto[2]))
+                    self.ui.vendas_localizacao_prod.setText(produto[4])
+                    self.ui.vendas_referencia_prod.setText(produto[8])
+                    self.ui.vendas_unidade_prod.setText(produto[7])
+                    self.ui.vendas_observ_prod.setText(produto[9])
+                    
+                    self.ui.vendas_quantidade_produto.setValue(1)
+                    break
+                else:
+                    self.ui.vendas_nome_produto.setText("---------------------------")
+                    self.ui.vendas_valor_produto.setText("R$ 0,00")
+                    self.ui.vendas_qtd_estoque.setText("---")
+                    self.ui.vendas_localizacao_prod.setText("---")
+                    self.ui.vendas_referencia_prod.setText("---")
+                    self.ui.vendas_unidade_prod.setText("---")
+                    self.ui.vendas_observ_prod.setText("")
+                    self.ui.vendas_total_produto.setText("R$ 0,00")
+                    
+            valor_produto = float(self.ui.vendas_valor_produto.text().replace("R$ ", "").replace(",", "."))
+            estoque = float(self.ui.vendas_qtd_estoque.text())
+            quantidade = float(self.ui.vendas_quantidade_produto.text())
+            
+            if quantidade > estoque:
+                QMessageBox.warning(self, "Erro", "Não há estoque suficiente para adicionar o produto!")
+                
+            else:
+                valor_total = valor_produto * quantidade
+                self.ui.vendas_total_produto.setText(f"R$ {valor_total:.2f}".replace(".", ","))
+        
+        def atualizar_quantidade_produto(self):
+            # Ao modificar a quantidade, atualiza o valor total do produto
+            if self.ui.vendas_input_produto.text() == "":
+                QMessageBox.warning(self, "Erro", "Digite o código do produto!")
+                return None
+            
+            valor_produto = float(self.ui.vendas_valor_produto.text().replace("R$ ", "").replace(",", "."))
+            quantidade = float(self.ui.vendas_quantidade_produto.text())
+            valor_total = valor_produto * quantidade
+            estoque = float(self.ui.vendas_qtd_estoque.text())
+            
+            if quantidade > estoque:
+                QMessageBox.warning(self, "Erro", "Não há estoque suficiente para realizar a venda!")
+                return None
+            
+            self.ui.vendas_total_produto.setText(f"R$ {valor_total:.2f}".replace(".", ","))
+               
+        def adicionar_produto_cupom(self):
+            
+            codigo = self.ui.vendas_input_produto.text()
+            nome = self.ui.vendas_nome_produto.text()
+            valor = self.ui.vendas_valor_produto.text() 
+            
+            if codigo == "":
+                QMessageBox.warning(self, "Erro", "Digite o código do produto!")
+                return None
+            
+            if nome == "---------------------------":
+                QMessageBox.warning(self, "Erro", "Produto não encontrado!")
+                return None
+            
+            
+            if self.ui.vendas_quantidade_produto.text().endswith(".0"):
+                quantidade = int(self.ui.vendas_quantidade_produto.text())
+            else:
+                quantidade = float(self.ui.vendas_quantidade_produto.text())
+                
+            if self.ui.vendas_qtd_estoque.text().endswith(".0"):
+                estoque = int(self.ui.vendas_qtd_estoque.text())
+            else:
+                estoque = float(self.ui.vendas_qtd_estoque.text())
+            
+            total = self.ui.vendas_total_produto.text()
+            
+            
+            
+            if quantidade > estoque:
+                QMessageBox.warning(self, "Erro", "Não há estoque suficiente para realizar a venda!")
+                return None
+                
+            produto = f"""
+            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            Produto: {codigo} - {nome}
+            Quantidade: {quantidade}
+            Valor unitário: {valor}
+            Valor total do produto: {total}
+            
+            
+            """
+            estoque_atual = estoque - quantidade
+            if str(estoque_atual).endswith(".0"):
+                estoque_atual = int(estoque_atual)
+            
+            self.ui.vendas_qtd_estoque.setText(str(estoque_atual))
+            
+            self.atualizar_dados_produto(codigo, "Quantidade em estoque", estoque_atual)
+            
+            self.ui.vendas_cupom.append(produto)
+            
+            pedido = self.ui.vendas_cupom.toHtml()
+            self.gravar_pedido_temporario(pedido)  
+                
+        ## Sinais
+        self.ui.vendas_input_produto.textChanged.connect(lambda: atualizar_dados_produto(self, self.ui.vendas_input_produto.text()))
+        
+        self.ui.vendas_quantidade_produto.textChanged.connect(lambda: atualizar_quantidade_produto(self))
+        
+        self.ui.vendas_adicionar_produto.clicked.connect(lambda: adicionar_produto_cupom(self))
+        
+        self.ui.vendas_limpar_pedido.clicked.connect(self.limpar_pedido_temporario)
+            
+    def atualizar_layout_estoque_produtos(self):
+        self.ui = self.loader.load("Layout/tela_estoque_prod.ui")
+        self.setCentralWidget(self.ui)
+        self.setWindowTitle("Sistema de Vendas - Estoque de Produtos")
+        
+        self.config_padrao()
+        
+        def filtrar_tabela_produtos(self, texto):
+            # Itera sobre todas as linhas
+            for i in range(self.ui.estoque_tabela_produtos.rowCount()):
+                # Esconde a linha se o texto do filtro não estiver na linha
+                self.ui.estoque_tabela_produtos.setRowHidden(i,
+                                                        texto.upper() not in self.ui.estoque_tabela_produtos.item(i, 1).text().upper()
+                                                        and texto.upper() not in self.ui.estoque_tabela_produtos.item(i, 0).text().upper())
+        
+        def atualizar_tabela(self, produtos):
+            self.ui.estoque_tabela_produtos.setRowCount(len(produtos))
+            self.ui.estoque_tabela_produtos.setColumnCount(len(produtos[0]))
+            
+            self.ui.estoque_tabela_produtos.setHorizontalHeaderLabels(["    Código    ",
+                                                                    "              Nome do produto              ",
+                                                                    "Quantidade em estoque", "Quantidade minima",
+                                                                    "Localização", "Valor unitário",
+                                                                    "Valor de aquisição", "Unidade", "Referência",
+                                                                    "                       Observações                       "])
+            for i, linha in enumerate(produtos):
+                for j, valor in enumerate(linha):
+                    item = QTableWidgetItem(str(valor))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    self.ui.estoque_tabela_produtos.setItem(i, j, item)
+        
+        def duplo_clique_tabela(self, item):
+            # Pega o item da primeira coluna da linha selecionada
+            codigo = self.ui.estoque_tabela_produtos.item(item.row(), 0).text()
+            
+            # Tela de vendas
+            self.atualizar_layout_realizar_vendas()
+            self.ui.vendas_input_produto.setText(codigo)
+        
+        produtos = self.listar_produtos_tabela()
+        atualizar_tabela(self, produtos)
+        
+        # Configurações da tabela
+        self.ui.estoque_tabela_produtos.resizeColumnsToContents()
+        self.ui.estoque_tabela_produtos.setColumnWidth(1, 250)
+        self.ui.estoque_tabela_produtos.setColumnWidth(9, 300)
+        self.ui.estoque_tabela_produtos.setEditTriggers(QTableWidget.NoEditTriggers)
+
+        
+        ## Sinais
+        self.ui.estoque_input_produtos.textChanged.connect(lambda: filtrar_tabela_produtos(self, self.ui.estoque_input_produtos.text()))
+        self.ui.estoque_tabela_produtos.doubleClicked.connect(lambda: duplo_clique_tabela(self, self.ui.estoque_tabela_produtos.selectedItems()[0]))
+    
+    def listar_produtos_tabela(self):
+        with open("dados/produtos.json", "r") as arquivo:
+            produtos = json.load(arquivo)
+        
+        produtos = [
+            [
+            produto['Codigo do produto'],
+            produto['Nome do produto'],
+            produto['Quantidade em estoque'],
+            produto['Quantidade minima'],
+            produto['Localizacao do produto'],
+            f"R$ {produto['Valor Unitario']}".replace(".", ","),
+            f"R$ {produto['Valor de aquisicao']}".replace(".", ","),
+            produto['Unidade'],
+            produto['Referencia'],
+            produto['Observacao livre']
+                
+            ] for produto in produtos['produtos']
+        ]
+        
+        return produtos
+    
+    def listar_produtos(self):
+        
+        produtos = self.ler_produtos_temporarios()
+        
+        produtos = [
+            [
+            produto['Codigo do produto'],
+            produto['Nome do produto'],
+            produto['Quantidade em estoque'],
+            produto['Quantidade minima'],
+            produto['Localizacao do produto'],
+            produto['Valor Unitario'],
+            produto['Valor de aquisicao'],
+            produto['Unidade'],
+            produto['Referencia'],
+            produto['Observacao livre']
+                
+            ] for produto in produtos['produtos']
+        ]
+        
+        return produtos
+     
+    def gravar_produtos_producao(self, produtos):
+        with open("dados/produtos.json", "w") as arquivo:
+            json.dump(produtos, arquivo, indent=4)
+
+    ## Funções para dados temporários ##########################################
+
+    def gravar_pedido_temporario(self, pedido):
+        with open("dados/pedido_temp.json", "w") as arquivo:
+            json.dump(pedido, arquivo, indent=4)
+
+    def ler_pedido_temporario(self):
+        with open("dados/pedido_temp.json", "r") as arquivo:
+            pedido = json.load(arquivo)
+        
+        if pedido == {}:
+            return None
+        else:
+            self.ui.vendas_cupom.setText(pedido)
+    
+    def limpar_pedido_temporario(self):
+        with open("dados/pedido_temp.json", "w") as arquivo:
+            json.dump({}, arquivo, indent=4)
+        
+        self.atualizar_layout_realizar_vendas()
+        self.limpando_produtos_temporarios()
+        self.gravar_produtos_temporarios()
+    
+    def ler_produtos_temporarios(self):    
+        with open("dados/produtos_temp.json", "r") as arquivo:
+            produtos = json.load(arquivo)
+        
+        return produtos
+              
+    def gravar_produtos_temporarios(self):
+        
+        with open("dados/produtos.json", "r") as arquivo:
+            produtos = json.load(arquivo)
+        
+        with open("dados/produtos_temp.json", "w") as arquivo:
+            json.dump(produtos, arquivo, indent=4)
+    
+    def limpando_produtos_temporarios(self):
+        with open("dados/produtos_temp.json", "w") as arquivo:
+            json.dump({}, arquivo, indent=4)
+    
+    def atualizar_dados_produto(self, codigo, atualizar, novo_valor):
+        with open("dados/produtos_temp.json", "r") as arquivo:
+            produtos = json.load(arquivo)
+            
+        for produto in produtos['produtos']:
+            if produto['Codigo do produto'] == codigo:
+                produto[atualizar] = novo_valor
+                break
+        
+        with open("dados/produtos.json", "w") as arquivo:
+            json.dump(produtos, arquivo, indent=4)
+    
+    ############################################################################
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    def exec():
+        app.exec()
+        window.limpar_pedido_temporario()
+        
+    sys.exit(exec())
