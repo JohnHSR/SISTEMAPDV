@@ -2,7 +2,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget, QMessageBox, QAbstractItemView
 from PySide6.QtCore import Qt, QTimer, QDate
 from PySide6.QtGui import QPixmap
-import sys, json, datetime, os
+import sys, json, datetime
 
 
 
@@ -243,9 +243,10 @@ class MainWindow(QMainWindow):
                 for registro in produtos['produtos']:
                     if input_codigo_produto.text() == registro['Codigo do produto']:
                         if str(registro['Quantidade em estoque']).endswith(".0") and str(quantidade).endswith(".0"):
-                            registro['Quantidade em estoque'] = int(registro['Quantidade em estoque']) - int(quantidade)
+                            estoque_novo = int(registro['Quantidade em estoque']) - int(quantidade)
                         else:
-                            registro['Quantidade em estoque'] = float(registro['Quantidade em estoque']) - float(quantidade)
+                            estoque_novo = float(registro['Quantidade em estoque']) - float(quantidade)
+                        registro['Quantidade em estoque'] = str(estoque_novo).replace(".0", "")
                             
                 with open ("dados/produtos_temp.json", "w") as arquivo:
                     json.dump(produtos, arquivo, indent=4)
@@ -415,7 +416,7 @@ class MainWindow(QMainWindow):
                             ###
                             
                             cupom = """
-                            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n<html><head><meta name="qrichtext" content="1" /><style type="text/css">\np, li { white-space: pre-wrap; }\n</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">-------------------------------------------------------------------------------------------------</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">SISTEMA DE VENDAS</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Razão Social da empresa</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">CNPJ: 00.000.000/0001-00</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">John H. (77) 90000-0000</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Av. João Bobo Nº 000</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">----------------------------------------------------------------------------------------------</span></p></body></html>
+                            <html><head><meta name="qrichtext" content="1" /><style type="text/css">\np, li { white-space: pre-wrap; }\n</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">-------------------------------------------------------------------------------------------------</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">SISTEMA DE VENDAS</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Razão Social da empresa</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">CNPJ: 00.000.000/0001-00</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">John H. (77) 90000-0000</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Av. João Bobo Nº 000</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">----------------------------------------------------------------------------------------------</span></p></body></html>
                             """
                             
                             cupom_pedido.setText(cupom)
@@ -1056,6 +1057,7 @@ class MainWindow(QMainWindow):
             if campo_cpf_cnpj.text() == "":
                 QMessageBox.warning(self, "Erro", "Digite o CPF ou CNPJ do cliente!")
                 return False
+                
             if validar_email(campo_email.text()) == False:
                 QMessageBox.warning(self, "Erro", "Digite um e-mail válido!")
                 return False
@@ -1135,7 +1137,7 @@ class MainWindow(QMainWindow):
             self.atualizar_layout_cadastro_clientes()
             
         ## Sinais
-        cpf_radio.clicked.connect(lambda: campo_cpf_cnpj.setInputMask("99.999.999-99"))
+        cpf_radio.clicked.connect(lambda: campo_cpf_cnpj.setInputMask("999.999.999-99"))
         cpf_radio.clicked.connect(lambda: mostrar_campos_cnpj(False))
         
         cnpj_radio.clicked.connect(lambda: campo_cpf_cnpj.setInputMask("99.999.999/9999-99"))
@@ -1164,7 +1166,7 @@ class MainWindow(QMainWindow):
             [
             produto['Codigo do produto'],
             produto['Nome do produto'],
-            produto['Quantidade em estoque'],
+            produto['Quantidade estoque'],
             produto['Quantidade minima'],
             produto['Localizacao do produto'],
             f"R$ {produto['Valor Unitario']}".replace(".", ","),
@@ -1175,6 +1177,12 @@ class MainWindow(QMainWindow):
                 
             ] for produto in produtos['produtos']
         ]
+        
+        for produto in produtos:
+            if str(produto[2]).endswith(".0"):
+                produto[2] = str(produto[2]).replace(".0", "")
+            if str(produto[3]).endswith(".0"):
+                produto[3] = str(produto[3]).replace(".0", "")
         
         return produtos        
     
