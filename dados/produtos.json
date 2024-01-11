@@ -3,7 +3,7 @@
         {
             "Codigo do produto": "193153599",
             "Nome do produto": "Fonte ATX 500W",
-            "Quantidade em estoque": 188,
+            "Quantidade em estoque": 183,
             "Quantidade minima": 215,
             "Localizacao do produto": "Q-23",
             "Valor Unitario": 626.65,
@@ -39,7 +39,7 @@
         {
             "Codigo do produto": "660825548",
             "Nome do produto": "Impressora Laser",
-            "Quantidade em estoque": 99,
+            "Quantidade em estoque": 95,
             "Quantidade minima": 97,
             "Localizacao do produto": "G-6",
             "Valor Unitario": 516.07,
@@ -51,7 +51,7 @@
         {
             "Codigo do produto": "550678749",
             "Nome do produto": "Roteador Wireless",
-            "Quantidade em estoque": 99,
+            "Quantidade em estoque": 95,
             "Quantidade minima": 173,
             "Localizacao do produto": "N-9",
             "Valor Unitario": 64.25,
@@ -87,7 +87,7 @@
         {
             "Codigo do produto": "573811779",
             "Nome do produto": "Gabinete ATX",
-            "Quantidade em estoque": 145,
+            "Quantidade em estoque": 144.0,
             "Quantidade minima": 249,
             "Localizacao do produto": "B-12",
             "Valor Unitario": 219.08,

@@ -269,7 +269,7 @@ class MainWindow(QMainWindow):
 
                     <p style="text-align: center;"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;VALOR TOTAL: {valor_total}</strong></p>
                     
-                    <h2 style="text-align:center"><strong>==============================</strong></h2>
+                    <h2 style="text-align:center"><strong>============================</strong></h2>
                     
                     <p>&nbsp;</p>
                     
@@ -308,14 +308,12 @@ class MainWindow(QMainWindow):
                 with open("dados/pedidos.json", "r") as arquivo:
                     pedidos = json.load(arquivo)
                 
-                if pedidos == {} or pedidos is None:
+                if pedidos['pedidos'] == [] or pedidos['pedidos'] is None:
                     return 1
                 
-                ultimo_pedido = max(pedidos.keys())
-                ultimo_pedido = int(ultimo_pedido) + 1
+                else:
+                    return pedidos['pedidos'][-1]['Numero do pedido'] + 1
                 
-                return ultimo_pedido
-            
             def baixar_produtos_estoque(codigo):
                 with open("dados/pedido_temp.json", "r") as arquivo:
                     pedido_temp = json.load(arquivo)
@@ -336,46 +334,104 @@ class MainWindow(QMainWindow):
                     json.dump(produtos, arquivo, indent=4)
                 
             def finalizar_pedido():
-                with open("dados/pedido_temp.json", "r") as arquivo:
-                    pedido_temp = json.load(arquivo)
-                    
-                if pedido_temp == {} or pedido_temp is None:
-                    QMessageBox.warning(self, "Erro", "Nenhum pedido para ser fechado!")
-                    return None
-                
-                if self.lista_produtos == []:
-                    QMessageBox.warning(self, "Erro", "Nenhum produto adicionado ao pedido!")
-                    return None
-                
-                if radio_dinheiro.isChecked():
-                    forma_pgto = "Dinheiro"
-                elif radio_pix.isChecked():
-                    forma_pgto = "Pix"
-                elif radio_credito.isChecked():
-                    forma_pgto = "Credito"
-                elif radio_debito.isChecked():
-                    forma_pgto = "Debito"
-                elif radio_pos.isChecked():
-                    forma_pgto = "Postergar"
-                    
-                if forma_pgto == "Dinheiro":
-                    self.ui2 = self.loader.load("Layout/tela_troco.ui")
-                    self.ui2.show()
-                    
-                    self.ui2.troco_campo_vlrped.setText(campo_total_pedido.text())
-                    valor_pedido = campo_total_pedido.text().replace("R$ ", "").replace(",", ".")
-                    
-                    
-                    def calcular_troco():
-                        valor_pago = self.ui2.troco_campo_vlrpag.text().replace(',', '.')
-                        if valor_pago == "" or valor_pago.isnumeric() == False:
-                            valor_pago = 0
-                            return None
-                        troco = float(valor_pago) - float(valor_pedido)
-                        self.ui2.troco_campo_vlrtroc.setText(f"R$ {troco:.2f}".replace(".", ","))
+                try:
+                    with open("dados/pedido_temp.json", "r") as arquivo:
+                        pedido_temp = json.load(arquivo)
                         
-                    def finalizar():
-                        numero_parcelas = 1
+                    if pedido_temp == {} or pedido_temp is None:
+                        QMessageBox.warning(self, "Erro", "Nenhum pedido para ser fechado!")
+                        return None
+                    
+                    if self.lista_produtos == []:
+                        QMessageBox.warning(self, "Erro", "Nenhum produto adicionado ao pedido!")
+                        return None
+                    
+                    if radio_dinheiro.isChecked():
+                        forma_pgto = "Dinheiro"
+                    elif radio_pix.isChecked():
+                        forma_pgto = "Pix"
+                    elif radio_credito.isChecked():
+                        forma_pgto = "Credito"
+                    elif radio_debito.isChecked():
+                        forma_pgto = "Debito"
+                    elif radio_pos.isChecked():
+                        forma_pgto = "Postergar"
+                        
+                    if forma_pgto == "Dinheiro":
+                        self.ui2 = self.loader.load("Layout/tela_troco.ui")
+                        self.ui2.show()
+                        
+                        self.ui2.troco_campo_vlrped.setText(campo_total_pedido.text())
+                        valor_pedido = campo_total_pedido.text().replace("R$ ", "").replace(",", ".")
+                        
+                        
+                        def calcular_troco():
+                            valor_pago = self.ui2.troco_campo_vlrpag.text().replace(',', '.')
+                            if valor_pago == "" or valor_pago.isnumeric() == False:
+                                valor_pago = 0
+                                return None
+                            troco = float(valor_pago) - float(valor_pedido)
+                            self.ui2.troco_campo_vlrtroc.setText(f"R$ {troco:.2f}".replace(".", ","))
+                            
+                        def finalizar():
+                            numero_parcelas = 1
+                            for produto in self.lista_produtos:
+                                Produto.baixar_produtos_estoque(produto['Codigo do produto'])
+                                
+                            numero_pedido = Produto.ultimo_numero_pedido()
+                            
+                            self.pedido['Numero do pedido'] = numero_pedido
+                            self.pedido['Data e hora'] = data_e_hora_atuais
+                            self.pedido['Operador'] = operador
+                            self.pedido['Cliente'] = campo_cliente.text()
+                            self.pedido['Produtos'] = self.lista_produtos
+                            self.pedido['Forma de pagamento'] = forma_pgto
+                            self.pedido['Quantidade de parcelas'] = numero_parcelas
+                            self.pedido['Desconto'] = f"R$ {valor_desconto:.2f}".replace(".", ",")
+                            self.pedido['Acrescimo'] = f"R$ {valor_adicional:.2f}".replace(".", ",")
+                            self.pedido['Valor total'] = campo_total_pedido.text()
+                            
+                            with open("dados/pedidos.json", "r") as arquivo:
+                                pedidos = json.load(arquivo)
+                                
+                            pedidos['pedidos'].append(self.pedido)
+                            
+                            with open("dados/pedidos.json", "w") as arquivo:
+                                json.dump(pedidos, arquivo, indent=4)
+                                
+                            with open ("dados/pedido_temp.json", "w") as arquivo:
+                                json.dump({}, arquivo, indent=4)
+                                
+                            self.pedido = {}
+                            self.lista_produtos = []
+                            
+                            ## Sobrescrever os dados dos produtos pelos produtos temporários
+                            with open("dados/produtos_temp.json", "r") as arquivo:
+                                produtos_temp = json.load(arquivo)
+                                
+                            with open("dados/produtos.json", "w") as arquivo:
+                                json.dump(produtos_temp, arquivo, indent=4)
+                                
+                            ###
+                            
+                            cupom = """
+                            <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n<html><head><meta name="qrichtext" content="1" /><style type="text/css">\np, li { white-space: pre-wrap; }\n</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">-------------------------------------------------------------------------------------------------</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">SISTEMA DE VENDAS</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Razão Social da empresa</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">CNPJ: 00.000.000/0001-00</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">John H. (77) 90000-0000</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Av. João Bobo Nº 000</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">----------------------------------------------------------------------------------------------</span></p></body></html>
+                            """
+                            
+                            cupom_pedido.setText(cupom)
+                    
+                            
+                            return self.ui2.close(), QMessageBox.information(self, "Sucesso", f"Pedido {numero_pedido} finalizado com sucesso")
+                        ## Sinais
+                        self.ui2.troco_campo_vlrpag.textChanged.connect(calcular_troco)
+                        self.ui2.troco_confirmar.clicked.connect(finalizar)
+
+                    else:
+                        if forma_pgto == "Credito":
+                            numero_parcelas = campo_parcelas.value()
+                        else:
+                            numero_parcelas = 1 
+                            
                         for produto in self.lista_produtos:
                             Produto.baixar_produtos_estoque(produto['Codigo do produto'])
                             
@@ -395,13 +451,11 @@ class MainWindow(QMainWindow):
                         with open("dados/pedidos.json", "r") as arquivo:
                             pedidos = json.load(arquivo)
                             
-                        pedidos[self.pedido['Numero do pedido']] = self.pedido
+                        pedidos['pedidos'].append(self.pedido)
                         
                         with open("dados/pedidos.json", "w") as arquivo:
                             json.dump(pedidos, arquivo, indent=4)
                             
-                        with open ("dados/pedido_temp.json", "w") as arquivo:
-                            json.dump({}, arquivo, indent=4)
                             
                         self.pedido = {}
                         self.lista_produtos = []
@@ -415,71 +469,18 @@ class MainWindow(QMainWindow):
                             
                         ###
                         
+                        QMessageBox.information(self, "Sucesso", f"Pedido {numero_pedido} finalizado com sucesso")
+                        
+                        with open ("dados/pedido_temp.json", "w") as arquivo:
+                            json.dump({}, arquivo, indent=4)
+                        
                         cupom = """
                         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n<html><head><meta name="qrichtext" content="1" /><style type="text/css">\np, li { white-space: pre-wrap; }\n</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">-------------------------------------------------------------------------------------------------</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">SISTEMA DE VENDAS</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Razão Social da empresa</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">CNPJ: 00.000.000/0001-00</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">John H. (77) 90000-0000</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Av. João Bobo Nº 000</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">----------------------------------------------------------------------------------------------</span></p></body></html>
                         """
                         
                         cupom_pedido.setText(cupom)
-                
-                        
-                        return self.ui2.close(), QMessageBox.information(self, "Sucesso", f"Pedido {numero_pedido} finalizado com sucesso")
-                    ## Sinais
-                    self.ui2.troco_campo_vlrpag.textChanged.connect(calcular_troco)
-                    self.ui2.troco_confirmar.clicked.connect(finalizar)
-
-                else:
-                    if forma_pgto == "Credito":
-                        numero_parcelas = campo_parcelas.value()
-                    else:
-                        numero_parcelas = 1 
-                        
-                    for produto in self.lista_produtos:
-                        Produto.baixar_produtos_estoque(produto['Codigo do produto'])
-                        
-                    numero_pedido = Produto.ultimo_numero_pedido()
-                    
-                    self.pedido['Numero do pedido'] = numero_pedido
-                    self.pedido['Data e hora'] = data_e_hora_atuais
-                    self.pedido['Operador'] = operador
-                    self.pedido['Cliente'] = campo_cliente.text()
-                    self.pedido['Produtos'] = self.lista_produtos
-                    self.pedido['Forma de pagamento'] = forma_pgto
-                    self.pedido['Quantidade de parcelas'] = numero_parcelas
-                    self.pedido['Desconto'] = f"R$ {valor_desconto:.2f}".replace(".", ",")
-                    self.pedido['Acrescimo'] = f"R$ {valor_adicional:.2f}".replace(".", ",")
-                    self.pedido['Valor total'] = campo_total_pedido.text()
-                    
-                    with open("dados/pedidos.json", "r") as arquivo:
-                        pedidos = json.load(arquivo)
-                        
-                    pedidos['pedidos'].append(self.pedido)
-                    
-                    with open("dados/pedidos.json", "w") as arquivo:
-                        json.dump(pedidos, arquivo, indent=4)
-                        
-                        
-                    self.pedido = {}
-                    self.lista_produtos = []
-                    
-                    ## Sobrescrever os dados dos produtos pelos produtos temporários
-                    with open("dados/produtos_temp.json", "r") as arquivo:
-                        produtos_temp = json.load(arquivo)
-                        
-                    with open("dados/produtos.json", "w") as arquivo:
-                        json.dump(produtos_temp, arquivo, indent=4)
-                        
-                    ###
-                    
-                    QMessageBox.information(self, "Sucesso", f"Pedido {numero_pedido} finalizado com sucesso")
-                    
-                    with open ("dados/pedido_temp.json", "w") as arquivo:
-                        json.dump({}, arquivo, indent=4)
-                    
-                    cupom = """
-                    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n<html><head><meta name="qrichtext" content="1" /><style type="text/css">\np, li { white-space: pre-wrap; }\n</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">-------------------------------------------------------------------------------------------------</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">SISTEMA DE VENDAS</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Razão Social da empresa</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">CNPJ: 00.000.000/0001-00</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">John H. (77) 90000-0000</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Av. João Bobo Nº 000</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">----------------------------------------------------------------------------------------------</span></p></body></html>
-                    """
-                    
-                    cupom_pedido.setText(cupom)
+                except Exception as erro:
+                    QMessageBox.warning(self, "Erro", f"Erro ao finalizar pedido: {erro}")
             
             def atualizar_dados_pedido_temp():
                 with open("dados/pedido_temp.json", "r") as arquivo:
@@ -672,11 +673,78 @@ class MainWindow(QMainWindow):
             botao_filtro_ped_cancelar.clicked.connect(lambda: self.ui2.close())
             ## Configs
         
+        def atualizar_tabela_pedidos():
+            with open("dados/pedidos.json", "r") as arquivo:
+                pedidos = json.load(arquivo)
+                
+            tabela_pedidos.setRowCount(len(pedidos['pedidos']))
+            tabela_pedidos.setColumnCount(4)
+            tabela_pedidos.setHorizontalHeaderLabels(["Número do pedido", "Data e hora", "Operador", "Cliente"])
+            
+            for i in range(len(pedidos['pedidos'])):
+                for j in range(4):
+                    tabela_pedidos.setItem(i, j, QTableWidgetItem(str(pedidos['pedidos'][i][list(pedidos['pedidos'][i].keys())[j]])))
+    
+            
+            tabela_pedidos.resizeColumnsToContents()
+            
+            tabela_pedidos.setEditTriggers(QTableWidget.NoEditTriggers)
+            
+            tabela_pedidos.setColumnWidth(0, 150)
+            tabela_pedidos.setColumnWidth(1, 150)
+            tabela_pedidos.setColumnWidth(2, 165)
+            tabela_pedidos.setColumnWidth(3, 165)
+            
+            # Centralizar tudo
+            for i in range(len(pedidos['pedidos'])):
+                for j in range(4):
+                    tabela_pedidos.item(i, j).setTextAlignment(Qt.AlignCenter)
+
+        def atualizar_dados_pedido(codigo_pedido):
+            with open("dados/pedidos.json", "r") as arquivo:
+                pedidos = json.load(arquivo)
+                
+            for pedido in pedidos['pedidos']:
+                if int(codigo_pedido) == pedido['Numero do pedido']:
+                    campo_num_pedido.setText(str(pedido['Numero do pedido']))
+                    campo_cliente.setText(pedido['Cliente'])
+                    campo_operador.setText(pedido['Operador'])
+                    campo_data_hora.setText(pedido['Data e hora'])
+                    campo_total_pedido.setText(pedido['Valor total'])
+                    
+                    tabela_produtos_pedido.setRowCount(len(pedido['Produtos']))
+                    tabela_produtos_pedido.setColumnCount(5)
+                    tabela_produtos_pedido.setHorizontalHeaderLabels(["Código", "Nome", "Quantidade", "Valor unitário", "Valor total"])
+                    
+                    for i in range(len(pedido['Produtos'])):
+                        for j in range(5):
+                            tabela_produtos_pedido.setItem(i, j, QTableWidgetItem(str(pedido['Produtos'][i][list(pedido['Produtos'][i].keys())[j]])))
+                            
+                    tabela_produtos_pedido.resizeColumnsToContents()
+                    
+                    tabela_produtos_pedido.setEditTriggers(QTableWidget.NoEditTriggers)
+                    
+                    tabela_produtos_pedido.setColumnWidth(0, 90)
+                    tabela_produtos_pedido.setColumnWidth(1, 180)
+                    tabela_produtos_pedido.setColumnWidth(3, 90)
+                    tabela_produtos_pedido.setColumnWidth(4, 90)
+                    
+                    # Centralizar tudo
+                    for i in range(len(pedido['Produtos'])):
+                        for j in range(5):
+                            tabela_produtos_pedido.item(i, j).setTextAlignment(Qt.AlignCenter)
+                            
+                    break
+            
         ## Configs
+        
+        atualizar_tabela_pedidos()
         
         ## Sinais
         
         botao_filtrar.clicked.connect(abrir_tela_filtros)
+  
+        tabela_pedidos.itemSelectionChanged.connect(lambda: atualizar_dados_pedido(tabela_pedidos.item(tabela_pedidos.currentRow(), 0).text()))
 
 ##############################################################################################################
     def atualizar_layout_cadastro_clientes(self):
