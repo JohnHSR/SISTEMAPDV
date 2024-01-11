@@ -1,8 +1,8 @@
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget, QMessageBox, QLabel
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget, QMessageBox, QAbstractItemView
+from PySide6.QtCore import Qt, QTimer, QDate
 from PySide6.QtGui import QPixmap
-import sys, json,datetime
+import sys, json, datetime, os
 
 
 
@@ -635,11 +635,16 @@ class MainWindow(QMainWindow):
         ## Métodos
         
         def abrir_tela_filtros():
+            
             global botao_filtro_ped_cancelar
             global botao_filtro_ped_filtrar
             
             self.ui2 = self.loader.load("Layout/tela_filtrar_pedidos.ui")
+            self.ui2.setModal(True)
+            self.ui2.setWindowFlag(Qt.WindowCloseButtonHint, False)
             self.ui2.show()
+            
+            
             
             label_num_ped = self.ui2.filtro_pedidos_label_numped
             num_ped_ini = self.ui2.filtro_pedidos_pedido_inicial
@@ -667,38 +672,202 @@ class MainWindow(QMainWindow):
             botao_filtro_ped_cancelar = self.ui2.filtro_pedidos_cancelar
             
             def filtros():
-                pass
+                def pedidos():
+                    if checkbox_num_ped.isChecked():
+                        if num_ped_ini.text() == "" or num_ped_fin.text() == "":
+                            QMessageBox.warning(self, "Erro", "Preencha o numero do pedido inicial e final!")
+                            return None
+                        else:
+                            return [int(num_ped_ini.text()), int(num_ped_fin.text())]
+                    else:
+                        if num_ped_ini.text() == "":
+                            return None
+                        else:
+                            return [int(num_ped_ini.text())]
+                        
+                num_pedidos = pedidos()
+                
+                def cliente():
+                    if nom_cod_cli.text() == "":
+                        return None
+                    else:
+                        return nom_cod_cli.text()    
             
-            
+                nom_cliente = cliente()
+                
+                def operador():
+                    if nom_ope.text() == "":
+                        return None
+                    else:
+                        return nom_ope.text()
+                    
+                nom_operador = operador()
+                
+                def valor_pedido():
+                    if checkbox_vlr_ped.isChecked():
+                        if vlr_ped_ini.value() == 0.00 or vlr_ped_fin.value() == 0.00:
+                            QMessageBox.warning(self, "Erro", "Preencha o valor inicial e final!")
+                            return None
+                        else:
+                            return [float(vlr_ped_ini.value()), float(vlr_ped_fin.value())]
+                    else:
+                        if vlr_ped_ini.value() == 0.00:
+                            return None
+                        else:
+                            return [float(vlr_ped_ini.value())]
+                
+                vlr_pedido = valor_pedido()
+                
+                def data():
+                    if checkbox_data.isChecked():
+                        if data_inicial.selectedDate() == None or data_final.selectedDate() == None:
+                            QMessageBox.warning(self, "Erro", "Preencha a data inicial e final!")
+                            return None
+                        else:
+                            return [data_inicial.selectedDate(), data_final.selectedDate()]
+                    else:
+                        return None
+                
+                dat_pedido = data()
+                
+                ## Regras
+                
+                if num_pedidos == None and nom_cliente == None and nom_operador == None and vlr_pedido == None and dat_pedido == None:
+                    QMessageBox.warning(self, "Erro", "Preencha pelo menos um campo!")
+                    return None
+                
+                if num_pedidos != None:
+                    if len(num_pedidos) == 2:
+                        if num_pedidos[0] == 0 or num_pedidos[1] == 0:
+                            QMessageBox.warning(self, "Erro", "O numero do pedido inicial ou final não podem ser 0!")
+                            return None
+                        if num_pedidos[0] > num_pedidos[1]:
+                            QMessageBox.warning(self, "Erro", "O numero do pedido inicial não pode ser maior que o final!")
+                            return None
+                        
+                        
+                    else:
+                        if num_pedidos[0] == 0:
+                            QMessageBox.warning(self, "Erro", "O numero do pedido inicial não pode ser 0!")
+                            return None
+                        
+                if dat_pedido != None:
+                    if dat_pedido[0] > dat_pedido[1]:
+                        QMessageBox.warning(self, "Erro", "A data inicial não pode ser maior que a final!")
+                        return None
+                
+                if vlr_pedido != None:
+                    if len(vlr_pedido) == 2:
+                        if vlr_pedido[0] == 0.00 or vlr_pedido[1] == 0.00:
+                            QMessageBox.warning(self, "Erro", "O valor inicial ou final não podem ser 0!")
+                            return None
+                        if vlr_pedido[0] > vlr_pedido[1]:
+                            QMessageBox.warning(self, "Erro", "O valor inicial não pode ser maior que o final!")
+                            return None
+                                            
+                    else:
+                        if vlr_pedido[0] == 0.00:
+                            QMessageBox.warning(self, "Erro", "O valor inicial não pode ser 0!")
+                            return None
+                    
+                ## Filtrar tabela baseando-se nos filtros
+                
+                # For item in tabela_pedidos
+                
+                for i in range(tabela_pedidos.rowCount()):
+                    if num_pedidos != None:
+                        if len(num_pedidos) == 2:
+                            if int(tabela_pedidos.item(i, 0).text()) >= num_pedidos[0] and int(tabela_pedidos.item(i, 0).text()) <= num_pedidos[1]:
+                                tabela_pedidos.setRowHidden(i, False)
+                            else:
+                                tabela_pedidos.setRowHidden(i, True)
+                        else:
+                            if int(tabela_pedidos.item(i, 0).text()) == num_pedidos[0]:
+                                tabela_pedidos.setRowHidden(i, False)
+                            else:
+                                tabela_pedidos.setRowHidden(i, True)
+                                
+                    if nom_cliente != None:
+                        if nom_cliente.upper() in tabela_pedidos.item(i, 3).text().upper():
+                            tabela_pedidos.setRowHidden(i, False)
+                        else:
+                            tabela_pedidos.setRowHidden(i, True)
+                            
+                    if nom_operador != None:
+                        if nom_operador.upper() in tabela_pedidos.item(i, 2).text().upper():
+                            tabela_pedidos.setRowHidden(i, False)
+                        else:
+                            tabela_pedidos.setRowHidden(i, True)
+                            
+                    if vlr_pedido != None:
+                        if len(vlr_pedido) == 2:
+                            if float(tabela_pedidos.item(i, 4).text().replace("R$ ", "").replace(",", ".")) >= vlr_pedido[0] and float(tabela_pedidos.item(i, 4).text().replace("R$ ", "").replace(",", ".")) <= vlr_pedido[1]:
+                                tabela_pedidos.setRowHidden(i, False)
+                            else:
+                                tabela_pedidos.setRowHidden(i, True)
+                        else:
+                            if float(tabela_pedidos.item(i, 4).text().replace("R$ ", "").replace(",", ".")) == vlr_pedido[0]:
+                                tabela_pedidos.setRowHidden(i, False)
+                            else:
+                                tabela_pedidos.setRowHidden(i, True)
+                                
+                    if dat_pedido != None:
+                        if dat_pedido[0] <= QDate.fromString(tabela_pedidos.item(i, 1).text(), "dd/MM/yyyy") and dat_pedido[1] >= QDate.fromString(tabela_pedidos.item(i, 1).text(), "dd/MM/yyyy"):
+                            tabela_pedidos.setRowHidden(i, False)
+                        else:
+                            tabela_pedidos.setRowHidden(i, True)
+                    
+                self.ui2.close()               
+           
+            botao_filtro_ped_filtrar.clicked.connect(filtros)
             botao_filtro_ped_cancelar.clicked.connect(lambda: self.ui2.close())
-            ## Configs
+            
+        def limpar_filtros():
+            for i in range(tabela_pedidos.rowCount()):
+                tabela_pedidos.setRowHidden(i, False)
+                
+            campo_num_pedido.setText("")
+            campo_cliente.setText("")
+            campo_operador.setText("")
+            campo_data_hora.setText("")
+            campo_total_pedido.setText("")
+            
+            tabela_produtos_pedido.setRowCount(0)
         
         def atualizar_tabela_pedidos():
             with open("dados/pedidos.json", "r") as arquivo:
                 pedidos = json.load(arquivo)
                 
             tabela_pedidos.setRowCount(len(pedidos['pedidos']))
-            tabela_pedidos.setColumnCount(4)
-            tabela_pedidos.setHorizontalHeaderLabels(["Número do pedido", "Data e hora", "Operador", "Cliente"])
+            tabela_pedidos.setColumnCount(5)
+            tabela_pedidos.setHorizontalHeaderLabels(["Número do pedido", "Data e Hora", "Operador", "Cliente", "Valor total"])
             
             for i in range(len(pedidos['pedidos'])):
-                for j in range(4):
-                    tabela_pedidos.setItem(i, j, QTableWidgetItem(str(pedidos['pedidos'][i][list(pedidos['pedidos'][i].keys())[j]])))
-    
-            
-            tabela_pedidos.resizeColumnsToContents()
-            
-            tabela_pedidos.setEditTriggers(QTableWidget.NoEditTriggers)
-            
+                for j in range(5):
+                    num_ped = pedidos['pedidos'][i]['Numero do pedido']
+                    data_hora = pedidos['pedidos'][i]['Data e hora']
+                    operador = pedidos['pedidos'][i]['Operador']
+                    cliente = pedidos['pedidos'][i]['Cliente']
+                    valor_total = pedidos['pedidos'][i]['Valor total']
+                
+                    dados = [num_ped, data_hora, operador, cliente, valor_total]
+                    
+                    tabela_pedidos.setItem(i, j, QTableWidgetItem(str(dados[j])))
+                    
             tabela_pedidos.setColumnWidth(0, 150)
             tabela_pedidos.setColumnWidth(1, 150)
             tabela_pedidos.setColumnWidth(2, 165)
             tabela_pedidos.setColumnWidth(3, 165)
+            tabela_pedidos.setColumnWidth(4, 135)
             
             # Centralizar tudo
             for i in range(len(pedidos['pedidos'])):
-                for j in range(4):
+                for j in range(5):
                     tabela_pedidos.item(i, j).setTextAlignment(Qt.AlignCenter)
+                    
+            tabela_pedidos.setEditTriggers(QTableWidget.NoEditTriggers)
+            # Desativar seleção de múltiplas linhas
+            tabela_pedidos.setSelectionMode(QAbstractItemView.SingleSelection)
 
         def atualizar_dados_pedido(codigo_pedido):
             with open("dados/pedidos.json", "r") as arquivo:
@@ -743,6 +912,7 @@ class MainWindow(QMainWindow):
         ## Sinais
         
         botao_filtrar.clicked.connect(abrir_tela_filtros)
+        botao_limpar_filtros.clicked.connect(limpar_filtros)
   
         tabela_pedidos.itemSelectionChanged.connect(lambda: atualizar_dados_pedido(tabela_pedidos.item(tabela_pedidos.currentRow(), 0).text()))
 
@@ -1011,7 +1181,8 @@ class MainWindow(QMainWindow):
     def limpar_pedido_temporario(self):
         with open("dados/pedido_temp.json", "w") as arquivo:
             json.dump({}, arquivo, indent=4)        
-
+        
+        
 ##############################################################################################################
 ##############################################################################################################
 
