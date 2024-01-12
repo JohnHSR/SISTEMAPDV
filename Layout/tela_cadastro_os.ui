@@ -881,6 +881,19 @@ border-style: solid;</string>
      <string>Modelo do aparelho</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="botao_home">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>71</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>HOME</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

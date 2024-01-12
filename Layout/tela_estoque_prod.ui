@@ -50,7 +50,7 @@
    <widget class="QPushButton" name="botao_home">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>10</y>
       <width>71</width>
       <height>61</height>

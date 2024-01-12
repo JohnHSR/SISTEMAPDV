@@ -1435,15 +1435,15 @@ class MainWindow(QMainWindow):
                     return None
                 
             tabela_acessorios.doubleClicked.connect(lambda: duplo_clique())
-                
-                
+                    
         definir_responsavel()   
         ## Sinais
         
         botao_inserir_acessorio.clicked.connect(lambda: inserir_acessorio(self))
         botao_remover_acessorio.clicked.connect(lambda: remover_acessorio(self))
         botao_cadastrar_os.clicked.connect(lambda: cadastrar_os(self))
-        botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))    
+        botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))
+        botao_cancelar.clicked.connect(lambda: self.atualizar_layout_nova_os())
         
 ##############################################################################################################
     ## Funções para manipulação de dados
