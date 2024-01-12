@@ -28,6 +28,7 @@ class MainWindow(QMainWindow):
         self.lista_produtos = []
         self.pedido = {}
         self.lista_cad_clientes = []
+        self.acessorios_incluidos = []
 
         ## BARRA DE STATUS =============================================================================================
         barra_status = self.statusBar()
@@ -140,6 +141,7 @@ class MainWindow(QMainWindow):
         radio_pos = self.ui.vendas_pgto_pos
         
         botao_selecionar_cliente = self.ui.vendas_selecionar_cliente
+        botao_cliente_padrao = self.ui.vendas_cliente_padrao
         label_cliente = self.ui.vendas_label_cliente
         campo_cliente = self.ui.vendas_cliente
         
@@ -531,7 +533,59 @@ class MainWindow(QMainWindow):
                 Produto.somar_total_pedido()
         
         Produto.atualizar_dados_pedido_temp() 
+        
+        def buscar_cliente(self):
+            self.ui_buscar_cliente = self.loader.load("Layout/tela_buscar_cliente.ui")
+            self.ui_buscar_cliente.setModal(True)
+            self.ui_buscar_cliente.setFixedSize(self.ui_buscar_cliente.size())
+            self.ui_buscar_cliente.show()
             
+            campo_busca = self.ui_buscar_cliente.buscar_cliente_campo
+            tabela = self.ui_buscar_cliente.buscar_cliente_tabela
+            
+            def atualizar_tabela_clientes():
+                with open("dados/clientes.json", "r") as arquivo:
+                    clientes = json.load(arquivo)
+                    
+                tabela.setRowCount(len(clientes['clientes']))
+                tabela.setColumnCount(3)
+                tabela.setHorizontalHeaderLabels(["Código", "Nome ou razão social", "CPF/CNPJ"])
+                
+                for i in range(len(clientes['clientes'])):
+                    for j in range(3):
+                        tabela.setItem(i, j, QTableWidgetItem(str(clientes['clientes'][i][list(clientes['clientes'][i].keys())[j]])))
+                
+                # Centralizar tudo
+                for i in range(len(clientes['clientes'])):
+                    for j in range(3):
+                        tabela.item(i, j).setTextAlignment(Qt.AlignCenter)
+
+                tabela.setEditTriggers(QTableWidget.NoEditTriggers)
+                tabela.setSelectionMode(QAbstractItemView.SingleSelection)
+            
+                
+                def filtrar_tabela(texto):
+                    for i in range(len(clientes['clientes'])):
+                        codigo_cliente = str(clientes['clientes'][i]['Codigo do cliente']).upper()
+                        nome_razao = str(clientes['clientes'][i]['Nome ou razao social']).upper()
+                        cpf_cnpj = str(clientes['clientes'][i]['CPF/CNPJ']).upper()
+                        
+                        if texto.upper() in codigo_cliente or texto.upper() in nome_razao or texto.upper() in cpf_cnpj:
+                            tabela.setRowHidden(i, False)
+                        else:
+                            tabela.setRowHidden(i, True)
+                
+                def selecionar_cliente():
+                    codigo_cliente = tabela.item(tabela.currentRow(), 0).text()
+                    nome_cliente = tabela.item(tabela.currentRow(), 1).text()
+                    
+                    campo_cliente.setText(f"[{codigo_cliente}] - {nome_cliente}")
+                    self.ui_buscar_cliente.close()
+                
+                tabela.doubleClicked.connect(lambda: selecionar_cliente())
+                campo_busca.textChanged.connect(lambda: filtrar_tabela(campo_busca.text()))
+            
+            atualizar_tabela_clientes()
         ## Configs
         
         ## Sinais
@@ -545,8 +599,10 @@ class MainWindow(QMainWindow):
         campo_porc_desconto.valueChanged.connect(lambda: Produto.somar_total_pedido())
         
         campo_valor_adicional.valueChanged.connect(lambda: Produto.somar_total_pedido())
-        campo_porc_adicional.valueChanged.connect(lambda: Produto.somar_total_pedido())         
+        campo_porc_adicional.valueChanged.connect(lambda: Produto.somar_total_pedido())
         
+        botao_selecionar_cliente.clicked.connect(lambda: buscar_cliente(self))        
+        botao_cliente_padrao.clicked.connect(lambda: campo_cliente.setText("Cliente padrao"))
         
         botao_fechar_pedido.clicked.connect(lambda: Produto.finalizar_pedido())
 
@@ -1188,23 +1244,23 @@ class MainWindow(QMainWindow):
         
         valor_previsto = self.ui.os_total_previsto
         
-        obs_complementares = self.ui.os_obs_complementares
         
         botao_cadastrar_os = self.ui.os_cadastrar_os
         botao_cancelar = self.ui.os_cancelar
         
         ## Configs
-        
         data_abertura.setText(data_e_hora_atuais)
         data_prevista = (datetime.now() + timedelta(days=3), "%d/%m/%Y %H:%M")
         data_prevista = data_prevista[0].strftime(data_prevista[1])
         data_previsao.setText(data_prevista)
         
-        ## Métodos
         
+        
+        ## Métodos
         def buscar_cliente(self):
             self.ui_buscar_cliente = self.loader.load("Layout/tela_buscar_cliente.ui")
             self.ui_buscar_cliente.setModal(True)
+            self.ui_buscar_cliente.setFixedSize(self.ui_buscar_cliente.size())
             self.ui_buscar_cliente.show()
             
             campo_busca = self.ui_buscar_cliente.buscar_cliente_campo
@@ -1223,19 +1279,19 @@ class MainWindow(QMainWindow):
                         tabela.setItem(i, j, QTableWidgetItem(str(clientes['clientes'][i][list(clientes['clientes'][i].keys())[j]])))
                 
                 # Centralizar tudo
-                
                 for i in range(len(clientes['clientes'])):
                     for j in range(3):
                         tabela.item(i, j).setTextAlignment(Qt.AlignCenter)
 
                 tabela.setEditTriggers(QTableWidget.NoEditTriggers)
                 tabela.setSelectionMode(QAbstractItemView.SingleSelection)
+            
                 
                 def filtrar_tabela(texto):
                     for i in range(len(clientes['clientes'])):
                         codigo_cliente = str(clientes['clientes'][i]['Codigo do cliente']).upper()
                         nome_razao = str(clientes['clientes'][i]['Nome ou razao social']).upper()
-                        cpf_cnpj = str(clientes['clientes'][i]['CPF']).upper()
+                        cpf_cnpj = str(clientes['clientes'][i]['CPF/CNPJ']).upper()
                         
                         if texto.upper() in codigo_cliente or texto.upper() in nome_razao or texto.upper() in cpf_cnpj:
                             tabela.setRowHidden(i, False)
@@ -1253,17 +1309,92 @@ class MainWindow(QMainWindow):
                 campo_busca.textChanged.connect(lambda: filtrar_tabela(campo_busca.text()))
         
             atualizar_tabela_clientes()
+        
+        def definir_responsavel():
+            with open("dados/operadores.json", "r") as arquivo:
+                operadores = json.load(arquivo)
+                operadores = operadores['operadores']
             
+            for operador in operadores:
+                responsavel_os.addItem(operador['Nome'])
+        
+        def inserir_acessorio(self):
+            self.ui_inserir_acessorio = self.loader.load("Layout/tela_incluir_acessorio.ui")
+            self.ui_inserir_acessorio.setFixedSize(self.ui_inserir_acessorio.size())
+            self.ui_inserir_acessorio.show()
+            
+            quantidade_acessorio = self.ui_inserir_acessorio.inc_acs_qtd
+            campo_acessorio = self.ui_inserir_acessorio.inc_acs_nome
+            botao_inserir = self.ui_inserir_acessorio.inc_acs
+            botao_cancelar = self.ui_inserir_acessorio.inc_acs_cancelar
+            
+            def inserir():
+                if campo_acessorio.text() == "":
+                    QMessageBox.warning(self, "Erro", "Digite o acessorio!")
+                    return None
+                if len(campo_acessorio.text()) < 4:
+                    QMessageBox.warning(self, "Erro", "O acessorio deve ter no mínimo 4 caracteres!")
+                    return None
+                
+                acessorio = {
+                    "Nome": campo_acessorio.text(),
+                    "Quantidade": quantidade_acessorio.value()
+                }
+                
+                self.acessorios_incluidos.append(acessorio)
+                
+                acessorios.setText(acessorios.toPlainText() + f"{acessorio['Nome']} - {acessorio['Quantidade']} unidade(s)\n")
+                
+                self.ui_inserir_acessorio.close()
+                
+                
+                
+            botao_inserir.clicked.connect(lambda: inserir())
+            botao_cancelar.clicked.connect(lambda: self.ui_inserir_acessorio.close())
+                
+        def cadastrar_os(self):
+            with open("dados/os.json", "r") as arquivo:
+                os = json.load(arquivo)
+                
+            if campo_cliente.text() == "":
+                QMessageBox.warning(self, "Erro", "Selecione um cliente!")
+                return None
+            
+            if servico_solicitado.toPlainText() == "":
+                QMessageBox.warning(self, "Erro", "Digite o serviço solicitado!")
+                return None
+            
+            if chk_defeito.isChecked():
+                if defeito_aparente.toPlainText() == "":
+                    QMessageBox.warning(self, "Erro", "Digite o defeito aparente!")
+                    return None
+            
+            os['os'].append({
+                "Numero da OS": len(os['os']) + 1,
+                "Cliente": campo_cliente.text(),
+                "Responsavel": responsavel_os.currentText(),
+                "Tipo de aparelho": tipo_aparelho.currentText(),
+                "Acessorios adicionais": acessorios.toPlainText(),
+                "Servico solicitado": servico_solicitado.toPlainText(),
+                "Defeito aparente": defeito_aparente.toPlainText(),
+                "Data de abertura": data_abertura.text(),
+                "Data prevista": data_previsao.text(),
+                "Valor previsto": valor_previsto.text()
+            })
+            
+            with open("dados/os.json", "w") as arquivo:
+                json.dump(os, arquivo, indent=4)
+                
+            QMessageBox.information(self, "Sucesso", "OS cadastrada com sucesso!")
+            self.atualizar_layout_nova_os()
+        
+        definir_responsavel()   
         ## Sinais
         
-        botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))
+        botao_inserir_acessorio.clicked.connect(lambda: inserir_acessorio(self))
+        botao_cadastrar_os.clicked.connect(lambda: cadastrar_os(self))
+        botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))    
         
-        
-        
-        
-        
-        
-
 ##############################################################################################################
     ## Funções para manipulação de dados
 ##############################################################################################################

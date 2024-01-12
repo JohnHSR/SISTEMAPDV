@@ -51,7 +51,7 @@
             "Numero do pedido": 3,
             "Data e hora": "11/01/2024 16:44:58",
             "Operador": "John",
-            "Cliente": "Cliente padraos",
+            "Cliente": "Cliente padrao",
             "Produtos": [
                 {
                     "Codigo do produto": "573811779",
@@ -160,6 +160,26 @@
             "Desconto": "R$ 51,05",
             "Acrescimo": "R$ 0,00",
             "Valor total": "R$ 1300,00"
+        },
+        {
+            "Numero do pedido": 8,
+            "Data e hora": "12/01/2024 16:54:10",
+            "Operador": "John",
+            "Cliente": "[1] - John",
+            "Produtos": [
+                {
+                    "Codigo do produto": "774849960",
+                    "Nome do produto": "Placa de Video GT 1030",
+                    "Quantidade": 1.0,
+                    "Valor Unitario": 474.73,
+                    "Valor Total": "R$ 474,73"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 0,00",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 474,73"
         }
     ]
 }

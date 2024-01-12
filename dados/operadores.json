@@ -1,5 +1,37 @@
 {
     "operadores": [
-        
+        {
+            "ID": "1",
+            "Nome": "John"
+        },
+        {
+            "ID": "2",
+            "Nome": "Gabriel"
+        },
+        {
+            "ID": "3",
+            "Nome": "Lucas"
+        },
+        {
+            "ID": "4",
+            "Nome": "Matheus"
+        },
+        {
+            "ID": "5",
+            "Nome": "Pedro"
+        },
+        {
+            "ID": "6",
+            "Nome": "Paulo"
+        },
+        {
+            "ID": "7",
+            "Nome": "João"
+        },
+        {
+            "ID": "8",
+            "Nome": "Marcos"
+        }
+            
     ]
 }

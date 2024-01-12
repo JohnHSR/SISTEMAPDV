@@ -33,7 +33,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>10</y>
+      <y>70</y>
       <width>220</width>
       <height>31</height>
      </rect>
@@ -59,7 +59,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>10</y>
+      <y>70</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -94,7 +94,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>50</y>
+      <y>110</y>
       <width>491</width>
       <height>31</height>
      </rect>
@@ -133,7 +133,7 @@ border-style: solid;</string>
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>50</y>
+      <y>110</y>
       <width>210</width>
       <height>31</height>
      </rect>
@@ -156,7 +156,7 @@ border-style: solid;</string>
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>90</y>
+      <y>150</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -175,7 +175,7 @@ border-style: solid;</string>
     <property name="geometry">
      <rect>
       <x>430</x>
-      <y>90</y>
+      <y>150</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -194,7 +194,7 @@ border-style: solid;</string>
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>200</y>
+      <y>260</y>
       <width>251</width>
       <height>30</height>
      </rect>
@@ -286,7 +286,7 @@ border-style: solid;</string>
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>200</y>
+      <y>260</y>
       <width>210</width>
       <height>31</height>
      </rect>
@@ -308,8 +308,8 @@ border-style: solid;</string>
    <widget class="QPushButton" name="os_inserir_acessorio">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>200</y>
+      <x>270</x>
+      <y>400</y>
       <width>251</width>
       <height>31</height>
      </rect>
@@ -324,9 +324,9 @@ border-style: solid;</string>
     </property>
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>240</y>
-      <width>251</width>
+      <x>90</x>
+      <y>400</y>
+      <width>171</width>
       <height>141</height>
      </rect>
     </property>
@@ -351,8 +351,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>280</y>
+      <x>270</x>
+      <y>440</y>
       <width>251</width>
       <height>101</height>
      </rect>
@@ -368,8 +368,8 @@ border-style: solid;</string>
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="os_servico_solicitado">
@@ -378,8 +378,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>410</y>
+      <x>840</x>
+      <y>200</y>
       <width>511</width>
       <height>91</height>
      </rect>
@@ -395,8 +395,8 @@ border-style: solid;</string>
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="os_defeito_aparente">
@@ -405,8 +405,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>550</y>
+      <x>840</x>
+      <y>360</y>
       <width>511</width>
       <height>81</height>
      </rect>
@@ -422,15 +422,15 @@ border-style: solid;</string>
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="os_chk_defeito">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>510</y>
+      <x>840</x>
+      <y>300</y>
       <width>511</width>
       <height>31</height>
      </rect>
@@ -449,8 +449,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="clientes_label_codigo_4">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>410</y>
+      <x>840</x>
+      <y>170</y>
       <width>210</width>
       <height>31</height>
      </rect>
@@ -466,14 +466,14 @@ p, li { white-space: pre-wrap; }
      <string>Serviço Solicitado:</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="clientes_label_codigo_5">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>550</y>
+      <x>840</x>
+      <y>330</y>
       <width>210</width>
       <height>31</height>
      </rect>
@@ -489,7 +489,7 @@ p, li { white-space: pre-wrap; }
      <string>Defeito aparente:</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="os_data_abertura">
@@ -619,8 +619,8 @@ border-style: solid;</string>
    <widget class="QLabel" name="clientes_label_codigo_8">
     <property name="geometry">
      <rect>
-      <x>870</x>
-      <y>150</y>
+      <x>940</x>
+      <y>450</y>
       <width>271</width>
       <height>31</height>
      </rect>
@@ -642,8 +642,8 @@ border-style: solid;</string>
    <widget class="QDoubleSpinBox" name="os_total_previsto">
     <property name="geometry">
      <rect>
-      <x>1150</x>
-      <y>150</y>
+      <x>1220</x>
+      <y>450</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -656,61 +656,11 @@ border-style: solid;</string>
      </font>
     </property>
    </widget>
-   <widget class="QTextEdit" name="os_obs_complementares">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>850</x>
-      <y>350</y>
-      <width>441</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-width: 1px;
-border-style: solid;</string>
-    </property>
-    <property name="readOnly">
-     <bool>false</bool>
-    </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="clientes_label_codigo_9">
-    <property name="geometry">
-     <rect>
-      <x>860</x>
-      <y>320</y>
-      <width>441</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Observações complementares</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
    <widget class="QLabel" name="clientes_label_codigo_10">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>140</y>
+      <y>200</y>
       <width>210</width>
       <height>31</height>
      </rect>
@@ -733,7 +683,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>140</y>
+      <y>200</y>
       <width>251</width>
       <height>30</height>
      </rect>
@@ -754,8 +704,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="os_cadastrar_os">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>500</y>
+      <x>670</x>
+      <y>570</y>
       <width>340</width>
       <height>61</height>
      </rect>
@@ -774,7 +724,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="os_cancelar">
     <property name="geometry">
      <rect>
-      <x>900</x>
+      <x>1020</x>
       <y>570</y>
       <width>340</width>
       <height>61</height>
@@ -794,14 +744,138 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="os_remover_acessorio">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>240</y>
+      <x>270</x>
+      <y>550</y>
       <width>251</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>Remover acessório</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="os_marca_aparelho">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>310</y>
+      <width>251</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-width: 1px;
+border-style: solid;</string>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>32767</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Marca do aparelho</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="clientes_label_codigo_9">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>310</y>
+      <width>210</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Marca do aparelho:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="clientes_label_codigo_11">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>350</y>
+      <width>210</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Modelo do aparelho:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="os_modelo_aparelho">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>350</y>
+      <width>251</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-width: 1px;
+border-style: solid;</string>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>32767</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Modelo do aparelho</string>
     </property>
    </widget>
   </widget>

@@ -979,17 +979,17 @@ p, li { white-space: pre-wrap; }
      <string>Limpar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="vendas_selecionar_cliente">
+   <widget class="QPushButton" name="vendas_cliente_padrao">
     <property name="geometry">
      <rect>
-      <x>1090</x>
-      <y>270</y>
+      <x>1180</x>
+      <y>280</y>
       <width>170</width>
       <height>30</height>
      </rect>
     </property>
     <property name="text">
-     <string>Selecione o cliente</string>
+     <string>Selecionar Cliente padrão</string>
     </property>
    </widget>
    <widget class="QLabel" name="vendas_label_cliente">
@@ -1099,6 +1099,19 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="vendas_selecionar_cliente">
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>280</y>
+      <width>170</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Selecione o cliente</string>
     </property>
    </widget>
   </widget>
