@@ -250,9 +250,10 @@ class MainWindow(QMainWindow):
                     if input_codigo_produto.text() == registro['Codigo do produto']:
                         if str(registro['Quantidade em estoque']).endswith(".0") and str(quantidade).endswith(".0"):
                             estoque_novo = int(registro['Quantidade em estoque']) - int(quantidade)
+                            registro['Quantidade em estoque'] = estoque_novo
                         else:
                             estoque_novo = float(registro['Quantidade em estoque']) - float(quantidade)
-                        registro['Quantidade em estoque'] = str(estoque_novo).replace(".0", "")
+                            registro['Quantidade em estoque'] = estoque_novo
                             
                 with open ("dados/produtos_temp.json", "w") as arquivo:
                     json.dump(produtos, arquivo, indent=4)
@@ -286,7 +287,7 @@ class MainWindow(QMainWindow):
                 self.pedido['Numero do pedido'] = ''
                 self.pedido['Data e hora'] = ''
                 self.pedido['Operador'] = ''
-                self.pedido['Cliente'] = ''
+                self.pedido['Cliente'] = campo_cliente.text()
                 self.pedido['Produtos'] = self.lista_produtos
                 self.pedido['Forma de pagamento'] = ""
                 self.pedido['Quantidade de parcelas'] = ''
@@ -331,10 +332,14 @@ class MainWindow(QMainWindow):
                 for produto in pedido_temp['Produtos']:
                     for registro in produtos['produtos']:
                         if produto['Codigo do produto'] == registro['Codigo do produto']:
+                            # Se a quantidade for inteira, subtrai normalmente
                             if str(registro['Quantidade em estoque']).endswith(".0") and str(produto['Quantidade']).endswith(".0"):
-                                registro['Quantidade em estoque'] = int(registro['Quantidade em estoque']) - int(produto['Quantidade'])
+                                estoque_novo = int(registro['Quantidade em estoque']) - int(produto['Quantidade'])
+                                registro['Quantidade em estoque'] = estoque_novo
                             else:
-                                registro['Quantidade em estoque'] = float(registro['Quantidade em estoque']) - float(produto['Quantidade'])
+                                estoque_novo = float(registro['Quantidade em estoque']) - float(produto['Quantidade'])
+                                registro['Quantidade em estoque'] = estoque_novo                                
+                                
                                 
                 
                 with open ("dados/produtos.json", "w") as arquivo:
@@ -426,8 +431,7 @@ class MainWindow(QMainWindow):
                             """
                             
                             cupom_pedido.setText(cupom)
-                    
-                            
+                            campo_total_pedido.setText("R$ 0,00")
                             return self.ui2.close(), QMessageBox.information(self, "Sucesso", f"Pedido {numero_pedido} finalizado com sucesso")
                         ## Sinais
                         self.ui2.troco_campo_vlrpag.textChanged.connect(calcular_troco)
@@ -484,8 +488,9 @@ class MainWindow(QMainWindow):
                         cupom = """
                         <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n<html><head><meta name="qrichtext" content="1" /><style type="text/css">\np, li { white-space: pre-wrap; }\n</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">-------------------------------------------------------------------------------------------------</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><br /></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">SISTEMA DE VENDAS</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Razão Social da empresa</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">CNPJ: 00.000.000/0001-00</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">John H. (77) 90000-0000</span></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">Av. João Bobo Nº 000</span></p>\n<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p>\n<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt;">----------------------------------------------------------------------------------------------</span></p></body></html>
                         """
-                        
                         cupom_pedido.setText(cupom)
+                        campo_total_pedido.setText("R$ 0,00")
+                        
                 except Exception as erro:
                     QMessageBox.warning(self, "Erro", f"Erro ao finalizar pedido: {erro}")
             

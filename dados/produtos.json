@@ -3,7 +3,7 @@
         {
             "Codigo do produto": "193153599",
             "Nome do produto": "Fonte ATX 500W",
-            "Quantidade em estoque": 183,
+            "Quantidade em estoque": 180,
             "Quantidade minima": 215,
             "Localizacao do produto": "Q-23",
             "Valor Unitario": 626.65,
@@ -15,7 +15,7 @@
         {
             "Codigo do produto": "774849960",
             "Nome do produto": "Placa de Video GT 1030",
-            "Quantidade em estoque": 21,
+            "Quantidade em estoque": 20.0,
             "Quantidade minima": 261,
             "Localizacao do produto": "R-10",
             "Valor Unitario": 474.73,
@@ -87,7 +87,7 @@
         {
             "Codigo do produto": "573811779",
             "Nome do produto": "Gabinete ATX",
-            "Quantidade em estoque": "142",
+            "Quantidade em estoque": 138,
             "Quantidade minima": 249,
             "Localizacao do produto": "B-12",
             "Valor Unitario": 219.08,
@@ -159,7 +159,7 @@
         {
             "Codigo do produto": "700167377",
             "Nome do produto": "HD Externo 1TB",
-            "Quantidade em estoque": 117,
+            "Quantidade em estoque": "115",
             "Quantidade minima": 230,
             "Localizacao do produto": "C-27",
             "Valor Unitario": 725.11,
