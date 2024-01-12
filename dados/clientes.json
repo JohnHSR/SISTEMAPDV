@@ -3,7 +3,7 @@
         {
             "Codigo do cliente": 1,
             "Nome ou razao social": "John",
-            "CPF": "000.000.000-00",
+            "CPF/CNPJ": "000.000.000-00",
             "Endereco": "Rua X",
             "Bairro": "Bairro Y",
             "Cidade": "Cidade X",

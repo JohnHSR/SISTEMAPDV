@@ -2,12 +2,13 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget, QMessageBox, QAbstractItemView
 from PySide6.QtCore import Qt, QTimer, QDate
 from PySide6.QtGui import QPixmap
-import sys, json, datetime
+import sys, json
+from datetime import timedelta, datetime
 
 
 
 versao = "1.0"
-data_e_hora_atuais = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+data_e_hora_atuais = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 operador = "John"
 cliente_padrao = "Cliente Padrao"
 mensagem_status = f"{data_e_hora_atuais} - Operador: {operador}                          Sistema - Versão {versao} - Em desenvolvimento por: John H."
@@ -79,8 +80,13 @@ class MainWindow(QMainWindow):
             self.ui.acao_cadastro_clientes.triggered.connect(self.atualizar_layout_cadastro_clientes)
             self.ui.acao_cadastro_clientes.setShortcut('F4')
             
+        if hasattr(self.ui, 'acao_nova_os'):
+            self.ui.acao_nova_os.disconnect(self)
+            self.ui.acao_nova_os.triggered.connect(self.atualizar_layout_nova_os)
+            self.ui.acao_nova_os.setShortcut('F5')
+            
     def atualizar_hora(self):
-        data_e_hora_atuais = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        data_e_hora_atuais = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         mensagem_status = f"{data_e_hora_atuais} - Operador: {operador}                          Sistema - Versão {versao} - Em desenvolvimento por: John H."
         self.statusBar().showMessage(mensagem_status)   
 
@@ -1148,6 +1154,107 @@ class MainWindow(QMainWindow):
         botao_salvar.clicked.connect(lambda: salvar_cliente(self))
         botao_limpar.clicked.connect(lambda: limpar_campos())
         
+##############################################################################################################
+
+    def atualizar_layout_nova_os(self):
+        self.ui = self.loader.load("Layout/tela_cadastro_os.ui")
+        self.setCentralWidget(self.ui)
+        self.setWindowTitle("Sistema de Vendas - Nova OS")
+        
+        self.config_padrao()
+        
+        ## Campos
+        campo_cliente = self.ui.os_campo_cliente
+        botao_buscar_cliente = self.ui.os_buscar_cliente
+        botao_cadastrar_cliente = self.ui.os_cadastrar_cliente
+        
+        responsavel_os = self.ui.os_responsavel
+        tipo_aparelho = self.ui.os_tipo_aparelho
+        botao_inserir_acessorio = self.ui.os_inserir_acessorio
+        botao_remover_acessorio = self.ui.os_remover_acessorio
+        acessorios = self.ui.os_acessorios_adic
+        
+        servico_solicitado = self.ui.os_servico_solicitado
+        chk_defeito = self.ui.os_chk_defeito
+        defeito_aparente = self.ui.os_defeito_aparente
+        
+        data_abertura = self.ui.os_data_abertura
+        data_previsao = self.ui.os_data_previsao
+        
+        valor_previsto = self.ui.os_total_previsto
+        
+        obs_complementares = self.ui.os_obs_complementares
+        
+        botao_cadastrar_os = self.ui.os_cadastrar_os
+        botao_cancelar = self.ui.os_cancelar
+        
+        ## Configs
+        
+        data_abertura.setText(data_e_hora_atuais)
+        data_prevista = (datetime.now() + timedelta(days=3), "%d/%m/%Y %H:%M")
+        data_prevista = data_prevista[0].strftime(data_prevista[1])
+        data_previsao.setText(data_prevista)
+        
+        ## Métodos
+        
+        def buscar_cliente(self):
+            self.ui_buscar_cliente = self.loader.load("Layout/tela_buscar_cliente.ui")
+            self.ui_buscar_cliente.setModal(True)
+            self.ui_buscar_cliente.show()
+            
+            campo_busca = self.ui_buscar_cliente.buscar_cliente_campo
+            tabela = self.ui_buscar_cliente.buscar_cliente_tabela
+            
+            def atualizar_tabela_clientes():
+                with open("dados/clientes.json", "r") as arquivo:
+                    clientes = json.load(arquivo)
+                    
+                tabela.setRowCount(len(clientes['clientes']))
+                tabela.setColumnCount(3)
+                tabela.setHorizontalHeaderLabels(["Código", "Nome ou razão social", "CPF/CNPJ"])
+                
+                for i in range(len(clientes['clientes'])):
+                    for j in range(3):
+                        tabela.setItem(i, j, QTableWidgetItem(str(clientes['clientes'][i][list(clientes['clientes'][i].keys())[j]])))
+                
+                # Centralizar tudo
+                
+                for i in range(len(clientes['clientes'])):
+                    for j in range(3):
+                        tabela.item(i, j).setTextAlignment(Qt.AlignCenter)
+
+                tabela.setEditTriggers(QTableWidget.NoEditTriggers)
+                tabela.setSelectionMode(QAbstractItemView.SingleSelection)
+                
+                def filtrar_tabela(texto):
+                    for i in range(len(clientes['clientes'])):
+                        codigo_cliente = str(clientes['clientes'][i]['Codigo do cliente']).upper()
+                        nome_razao = str(clientes['clientes'][i]['Nome ou razao social']).upper()
+                        cpf_cnpj = str(clientes['clientes'][i]['CPF']).upper()
+                        
+                        if texto.upper() in codigo_cliente or texto.upper() in nome_razao or texto.upper() in cpf_cnpj:
+                            tabela.setRowHidden(i, False)
+                        else:
+                            tabela.setRowHidden(i, True)
+                
+                def selecionar_cliente():
+                    campo_cliente.setText(tabela.item(tabela.currentRow(), 0).text())
+                    self.ui_buscar_cliente.close()
+                
+                atualizar_tabela_clientes()
+                tabela.doubleClicked.connect(lambda: selecionar_cliente())
+                campo_busca.textChanged.connect(lambda: filtrar_tabela(campo_busca.text()))
+        
+        ## Sinais
+        
+        botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))
+        
+        
+        
+        
+        
+        
+
 ##############################################################################################################
     ## Funções para manipulação de dados
 ##############################################################################################################
