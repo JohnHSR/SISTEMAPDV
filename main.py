@@ -1243,13 +1243,17 @@ class MainWindow(QMainWindow):
                             tabela.setRowHidden(i, True)
                 
                 def selecionar_cliente():
-                    campo_cliente.setText(tabela.item(tabela.currentRow(), 0).text())
+                    codigo_cliente = tabela.item(tabela.currentRow(), 0).text()
+                    nome_cliente = tabela.item(tabela.currentRow(), 1).text()
+                    
+                    campo_cliente.setText(f"[{codigo_cliente}] - {nome_cliente}")
                     self.ui_buscar_cliente.close()
                 
-                atualizar_tabela_clientes()
                 tabela.doubleClicked.connect(lambda: selecionar_cliente())
                 campo_busca.textChanged.connect(lambda: filtrar_tabela(campo_busca.text()))
         
+            atualizar_tabela_clientes()
+            
         ## Sinais
         
         botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))
