@@ -1,4 +1,16 @@
 {
     "os": [
-
-]}
+        {
+            "Numero da OS": 1,
+            "Cliente": "[1] - John",
+            "Responsavel": "Gabriel",
+            "Tipo de aparelho": "Celular",
+            "Acessorios adicionais": "Carregador - 1 unidade(s)\nCapa - 1 unidade(s)\nChip Claro - 1 unidade(s)\n",
+            "Servico solicitado": "Troca de tela do aparelho + Conector",
+            "Defeito aparente": "Tela n\u00e3o liga, celular n\u00e3o carrega",
+            "Data de abertura": "12/01/2024 17:05",
+            "Data prevista": "15/01/2024 17:05",
+            "Valor previsto": "99,00"
+        }
+    ]
+}

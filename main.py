@@ -1224,6 +1224,8 @@ class MainWindow(QMainWindow):
         
         self.config_padrao()
         
+        self.acessorios_incluidos = []
+        
         ## Campos
         campo_cliente = self.ui.os_campo_cliente
         botao_buscar_cliente = self.ui.os_buscar_cliente
@@ -1321,12 +1323,15 @@ class MainWindow(QMainWindow):
         def inserir_acessorio(self):
             self.ui_inserir_acessorio = self.loader.load("Layout/tela_incluir_acessorio.ui")
             self.ui_inserir_acessorio.setFixedSize(self.ui_inserir_acessorio.size())
+            self.ui_inserir_acessorio.setModal(True)
             self.ui_inserir_acessorio.show()
             
             quantidade_acessorio = self.ui_inserir_acessorio.inc_acs_qtd
             campo_acessorio = self.ui_inserir_acessorio.inc_acs_nome
             botao_inserir = self.ui_inserir_acessorio.inc_acs
             botao_cancelar = self.ui_inserir_acessorio.inc_acs_cancelar
+            
+            campo_acessorio.setFocus()
             
             def inserir():
                 if campo_acessorio.text() == "":
@@ -1346,8 +1351,6 @@ class MainWindow(QMainWindow):
                 acessorios.setText(acessorios.toPlainText() + f"{acessorio['Nome']} - {acessorio['Quantidade']} unidade(s)\n")
                 
                 self.ui_inserir_acessorio.close()
-                
-                
                 
             botao_inserir.clicked.connect(lambda: inserir())
             botao_cancelar.clicked.connect(lambda: self.ui_inserir_acessorio.close())
@@ -1388,10 +1391,57 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Sucesso", "OS cadastrada com sucesso!")
             self.atualizar_layout_nova_os()
         
+        def remover_acessorio(self):
+            if self.acessorios_incluidos == []:
+                QMessageBox.warning(self, "Erro", "Não há acessorios para remover!")
+                return None
+            
+            self.ui_remover_acessorio = self.loader.load("Layout/tela_remover_acessorio.ui")
+            self.ui_remover_acessorio.setFixedSize(self.ui_remover_acessorio.size())
+            self.ui_remover_acessorio.setModal(True)
+            self.ui_remover_acessorio.show()
+            
+            tabela_acessorios = self.ui_remover_acessorio.rmv_acs_tabela
+            
+            tabela_acessorios.setRowCount(len(self.acessorios_incluidos))
+            tabela_acessorios.setColumnCount(2)
+            tabela_acessorios.setHorizontalHeaderLabels(["Nome", "Quantidade"])
+            tabela_acessorios.setEditTriggers(QTableWidget.NoEditTriggers)
+            
+            for i in range(len(self.acessorios_incluidos)):
+                for j in range(2):
+                    tabela_acessorios.setItem(i, j, QTableWidgetItem(str(self.acessorios_incluidos[i][list(self.acessorios_incluidos[i].keys())[j]])))
+            
+            # Centralizar tudo
+            for i in range(len(self.acessorios_incluidos)):
+                for j in range(2):
+                    tabela_acessorios.item(i, j).setTextAlignment(Qt.AlignCenter)
+            
+            def duplo_clique():
+                popup = QMessageBox.question(self, "Remover", "Deseja remover o acessorio?", QMessageBox.Yes | QMessageBox.No)
+                
+                if popup == QMessageBox.Yes:
+                    self.acessorios_incluidos.pop(tabela_acessorios.currentRow())
+                    tabela_acessorios.removeRow(tabela_acessorios.currentRow())
+                    
+                    acessorios.setText("")
+                    
+                    for acessorio in self.acessorios_incluidos:
+                        acessorios.setText(acessorios.toPlainText() + f"{acessorio['Nome']} - {acessorio['Quantidade']} unidade(s)\n")
+                    
+                    self.ui_remover_acessorio.close()
+                
+                else:
+                    return None
+                
+            tabela_acessorios.doubleClicked.connect(lambda: duplo_clique())
+                
+                
         definir_responsavel()   
         ## Sinais
         
         botao_inserir_acessorio.clicked.connect(lambda: inserir_acessorio(self))
+        botao_remover_acessorio.clicked.connect(lambda: remover_acessorio(self))
         botao_cadastrar_os.clicked.connect(lambda: cadastrar_os(self))
         botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))    
         

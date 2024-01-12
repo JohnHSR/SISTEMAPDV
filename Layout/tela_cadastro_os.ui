@@ -655,6 +655,9 @@ border-style: solid;</string>
       <bold>true</bold>
      </font>
     </property>
+    <property name="maximum">
+     <double>9999.989999999999782</double>
+    </property>
    </widget>
    <widget class="QLabel" name="clientes_label_codigo_10">
     <property name="geometry">
