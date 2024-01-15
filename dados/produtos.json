@@ -39,7 +39,7 @@
         {
             "Codigo do produto": "660825548",
             "Nome do produto": "Impressora Laser",
-            "Quantidade em estoque": 95,
+            "Quantidade em estoque": 87.0,
             "Quantidade minima": 97,
             "Localizacao do produto": "G-6",
             "Valor Unitario": 516.07,
@@ -63,7 +63,7 @@
         {
             "Codigo do produto": "283530443",
             "Nome do produto": "Impressora Laser",
-            "Quantidade em estoque": 115,
+            "Quantidade em estoque": 109,
             "Quantidade minima": 231,
             "Localizacao do produto": "Y-19",
             "Valor Unitario": 567.91,
@@ -123,7 +123,7 @@
         {
             "Codigo do produto": "860768588",
             "Nome do produto": "Fonte ATX 500W",
-            "Quantidade em estoque": 129,
+            "Quantidade em estoque": 122,
             "Quantidade minima": 136,
             "Localizacao do produto": "U-17",
             "Valor Unitario": 440.52,
@@ -291,7 +291,7 @@
         {
             "Codigo do produto": "945096492",
             "Nome do produto": "Placa de Video GT 1030",
-            "Quantidade em estoque": 118,
+            "Quantidade em estoque": 115.0,
             "Quantidade minima": 122,
             "Localizacao do produto": "Q-8",
             "Valor Unitario": 31.79,
@@ -963,7 +963,7 @@
         {
             "Codigo do produto": "726279315",
             "Nome do produto": "SSD 240GB",
-            "Quantidade em estoque": 19,
+            "Quantidade em estoque": 18.0,
             "Quantidade minima": 289,
             "Localizacao do produto": "Z-8",
             "Valor Unitario": 729.31,

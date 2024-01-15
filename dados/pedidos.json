@@ -180,6 +180,186 @@
             "Desconto": "R$ 0,00",
             "Acrescimo": "R$ 0,00",
             "Valor total": "R$ 474,73"
+        },
+        {
+            "Numero do pedido": 9,
+            "Data e hora": "12/01/2024 19:38:01",
+            "Operador": "John",
+            "Cliente": "[25] - Lucas",
+            "Produtos": [
+                {
+                    "Codigo do produto": "283530443",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 2.0,
+                    "Valor Unitario": 567.91,
+                    "Valor Total": "R$ 1135,82"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 5,82",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 1130,00"
+        },
+        {
+            "Numero do pedido": 10,
+            "Data e hora": "15/01/2024 13:47:54",
+            "Operador": "John",
+            "Cliente": "Cliente padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "283530443",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 1.0,
+                    "Valor Unitario": 567.91,
+                    "Valor Total": "R$ 567,91"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 0,00",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 567,91"
+        },
+        {
+            "Numero do pedido": 11,
+            "Data e hora": "15/01/2024 14:14:34",
+            "Operador": "John",
+            "Cliente": "[1] Cliente Padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "660825548",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 5.0,
+                    "Valor Unitario": 516.07,
+                    "Valor Total": "R$ 2580,35"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 30,35",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 2550,00"
+        },
+        {
+            "Numero do pedido": 12,
+            "Data e hora": "15/01/2024 14:17:27",
+            "Operador": "John",
+            "Cliente": "[1] Cliente Padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "660825548",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 1.0,
+                    "Valor Unitario": 516.07,
+                    "Valor Total": "R$ 516,07"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 6,07",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 510,00"
+        },
+        {
+            "Numero do pedido": 13,
+            "Data e hora": "15/01/2024 14:17:56",
+            "Operador": "John",
+            "Cliente": "[1] - Cliente Padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "283530443",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 2.0,
+                    "Valor Unitario": 567.91,
+                    "Valor Total": "R$ 1135,82"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 35,82",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 1100,00"
+        },
+        {
+            "Numero do pedido": 14,
+            "Data e hora": "15/01/2024 14:19:00",
+            "Operador": "John",
+            "Cliente": "[1] - Cliente Padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "283530443",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 1.0,
+                    "Valor Unitario": 567.91,
+                    "Valor Total": "R$ 567,91"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 7,91",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 560,00"
+        },
+        {
+            "Numero do pedido": 15,
+            "Data e hora": "15/01/2024 14:19:25",
+            "Operador": "John",
+            "Cliente": "[1] - Cliente Padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "860768588",
+                    "Nome do produto": "Fonte ATX 500W",
+                    "Quantidade": 4.0,
+                    "Valor Unitario": 440.52,
+                    "Valor Total": "R$ 1762,08"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 0,00",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 1762,08"
+        },
+        {
+            "Numero do pedido": 16,
+            "Data e hora": "15/01/2024 14:23:53",
+            "Operador": "John",
+            "Cliente": "[1] - Cliente Padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "860768588",
+                    "Nome do produto": "Fonte ATX 500W",
+                    "Quantidade": 1.0,
+                    "Valor Unitario": 440.52,
+                    "Valor Total": "R$ 440,52"
+                }
+            ],
+            "Forma de pagamento": "Dinheiro",
+            "Quantidade de parcelas": 1,
+            "Desconto": "R$ 0,00",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 440,52"
+        },
+        {
+            "Numero do pedido": 17,
+            "Data e hora": "15/01/2024 14:28:29",
+            "Operador": "John",
+            "Cliente": "[1] - Cliente padrao",
+            "Produtos": [
+                {
+                    "Codigo do produto": "660825548",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 2.0,
+                    "Valor Unitario": 516.07,
+                    "Valor Total": "R$ 1032,14"
+                }
+            ],
+            "Forma de pagamento": "Credito",
+            "Quantidade de parcelas": 12,
+            "Desconto": "R$ 0,00",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 1032,14"
         }
     ]
 }

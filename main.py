@@ -10,7 +10,7 @@ from datetime import timedelta, datetime
 versao = "1.0"
 data_e_hora_atuais = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 operador = "John"
-cliente_padrao = "Cliente Padrao"
+cliente_padrao = "[1] - Cliente Padrao"
 mensagem_status = f"{data_e_hora_atuais} - Operador: {operador}                          Sistema - Versão {versao} - Em desenvolvimento por: John H."
 
 
@@ -85,6 +85,11 @@ class MainWindow(QMainWindow):
             self.ui.acao_nova_os.disconnect(self)
             self.ui.acao_nova_os.triggered.connect(self.atualizar_layout_nova_os)
             self.ui.acao_nova_os.setShortcut('F5')
+            
+        if hasattr(self.ui, 'acao_consulta_clientes'):
+            self.ui.acao_consulta_clientes.disconnect(self)
+            self.ui.acao_consulta_clientes.triggered.connect(self.atualizar_layout_consulta_clientes)
+            self.ui.acao_consulta_clientes.setShortcut('F6')
             
     def atualizar_hora(self):
         data_e_hora_atuais = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -349,6 +354,22 @@ class MainWindow(QMainWindow):
                 
             def finalizar_pedido():
                 try:
+                    
+                    def atualizar_dados_cliente(codigo):
+                            with open("dados/clientes.json", "r") as arquivo:
+                                clientes = json.load(arquivo)
+                                
+                            for registro in clientes['clientes']:
+                                if codigo == registro['Codigo do cliente']:
+                                    registro['Quantidade de compras'] += 1
+                                    registro['Valor total de compras'] += float(campo_total_pedido.text().replace("R$ ", "").replace(",", "."))
+                                    registro['Ultima compra'] = data_e_hora_atuais
+                                    break
+                            
+                            with open("dados/clientes.json", "w") as arquivo:
+                                json.dump(clientes, arquivo, indent=4)
+                                
+                                
                     with open("dados/pedido_temp.json", "r") as arquivo:
                         pedido_temp = json.load(arquivo)
                         
@@ -378,6 +399,8 @@ class MainWindow(QMainWindow):
                         self.ui2.troco_campo_vlrped.setText(campo_total_pedido.text())
                         valor_pedido = campo_total_pedido.text().replace("R$ ", "").replace(",", ".")
                         
+                        campo_cliente.setText(cliente_padrao)
+                        self.ui2.troco_campo_vlrpag.setFocus()
                         
                         def calcular_troco():
                             valor_pago = self.ui2.troco_campo_vlrpag.text().replace(',', '.')
@@ -404,6 +427,11 @@ class MainWindow(QMainWindow):
                             self.pedido['Desconto'] = f"R$ {valor_desconto:.2f}".replace(".", ",")
                             self.pedido['Acrescimo'] = f"R$ {valor_adicional:.2f}".replace(".", ",")
                             self.pedido['Valor total'] = campo_total_pedido.text()
+                            
+                            ## Coletar o codigo do cliente no seguinte formato [codigo] - [nome]
+                            codigo_cliente = campo_cliente.text().split(" - ")[0]
+                            codigo_cliente = int(codigo_cliente.replace("[", "").replace("]", ""))
+                            atualizar_dados_cliente(codigo_cliente)
                             
                             with open("dados/pedidos.json", "r") as arquivo:
                                 pedidos = json.load(arquivo)
@@ -461,6 +489,10 @@ class MainWindow(QMainWindow):
                         self.pedido['Acrescimo'] = f"R$ {valor_adicional:.2f}".replace(".", ",")
                         self.pedido['Valor total'] = campo_total_pedido.text()
                         
+                        codigo_cliente = campo_cliente.text().split(" - ")[0]
+                        codigo_cliente = int(codigo_cliente.replace("[", "").replace("]", ""))
+                        atualizar_dados_cliente(codigo_cliente)
+                        
                         with open("dados/pedidos.json", "r") as arquivo:
                             pedidos = json.load(arquivo)
                             
@@ -494,7 +526,7 @@ class MainWindow(QMainWindow):
                         campo_total_pedido.setText("R$ 0,00")
                         
                 except Exception as erro:
-                    QMessageBox.warning(self, "Erro", f"Erro ao finalizar pedido: {erro}")
+                    QMessageBox.warning(self, "Erro", f"Erro ao finalizar pedido: {erro} Linha: {sys.exc_info()[-1].tb_lineno}")
             
             def atualizar_dados_pedido_temp():
                 with open("dados/pedido_temp.json", "r") as arquivo:
@@ -981,7 +1013,7 @@ class MainWindow(QMainWindow):
         
         botao_filtrar.clicked.connect(abrir_tela_filtros)
         botao_limpar_filtros.clicked.connect(limpar_filtros)
-  
+        
         tabela_pedidos.itemSelectionChanged.connect(lambda: atualizar_dados_pedido(tabela_pedidos.item(tabela_pedidos.currentRow(), 0).text()))
 
 ##############################################################################################################
@@ -1078,7 +1110,7 @@ class MainWindow(QMainWindow):
             lista_clientes = clientes['clientes']
             
             for cliente in lista_clientes:
-                if cpf_cnpj == cliente['CPF'] or cpf_cnpj == cliente['CNPJ']:
+                if cpf_cnpj == cliente['CPF/CNPJ']:
                     QMessageBox.warning(self, "Erro", "CPF ou CNPJ já cadastrado!")
                     campo_cpf_cnpj.setText("")
                     campo_cpf_cnpj.setFocus()
@@ -1135,12 +1167,8 @@ class MainWindow(QMainWindow):
             
             ## Registros já cadastrados
             try:
-                if campo_cpf_cnpj.text() in [cliente['CPF'] for cliente in clientes.values()]:
+                if campo_cpf_cnpj.text() in [cliente['CPF/CNPJ'] for cliente in clientes.values()]:
                     QMessageBox.warning(self, "Erro", "CPF já cadastrado!")
-                    return False
-                
-                if campo_cpf_cnpj.text() in [cliente['CNPJ'] for cliente in clientes.values()]:
-                    QMessageBox.warning(self, "Erro", "CNPJ já cadastrado!")
                     return False
                 
                 if campo_ie.text() in [cliente['Inscricao estadual'] for cliente in clientes.values()]:
@@ -1173,10 +1201,10 @@ class MainWindow(QMainWindow):
             cliente['Codigo do cliente'] = ultimo_codigo_cliente()
             cliente['Nome ou razao social'] = campo_nome_raz.text()
             if cpf_radio.isChecked():
-                cliente['CPF'] = campo_cpf_cnpj.text()
+                cliente['CPF/CNPJ'] = campo_cpf_cnpj.text()
             else:
                 cliente['Nome fantasia'] = campo_nome_fantasia.text()
-                cliente['CNPJ'] = campo_cpf_cnpj.text()
+                cliente['CPF/CNPJ'] = campo_cpf_cnpj.text()
                 cliente['Inscricao estadual'] = campo_ie.text()
                 cliente['Inscricao municipal'] = campo_im.text()
             cliente['Endereco'] = campo_endereco.text()
@@ -1188,6 +1216,12 @@ class MainWindow(QMainWindow):
             cliente['Telefone 1'] = campo_telefone1.text()
             cliente['Telefone 2'] = campo_telefone2.text()
             cliente['Postergar'] = checkbox_postergar.isChecked()
+            cliente['Data de cadastro'] = data_e_hora_atuais
+            cliente['Quantidade de compras'] = 0
+            cliente['Valor total de compras'] = 0
+            cliente['Quantidade de serviços'] = 0
+            cliente['Valor total de serviços'] = 0
+            cliente['Ultima compra'] = "Nenhuma"
             
             self.lista_cad_clientes.append(cliente)
             
@@ -1444,6 +1478,64 @@ class MainWindow(QMainWindow):
         botao_cadastrar_os.clicked.connect(lambda: cadastrar_os(self))
         botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))
         botao_cancelar.clicked.connect(lambda: self.atualizar_layout_nova_os())
+    
+##############################################################################################################
+
+    def atualizar_layout_consulta_clientes(self):
+        self.ui = self.loader.load("Layout/tela_consulta_clientes.ui")
+        self.setCentralWidget(self.ui)
+        self.setWindowTitle("Sistema de Vendas - Consulta de clientes")
+        
+        self.config_padrao()
+        
+        ## Campos
+        campo_codnome = self.ui.consulta_clientes_input
+        tabela_clientes = self.ui.consulta_clientes_tabela
+        
+        def atualizar_tabela_clientes(self):
+            with open("dados/clientes.json", "r") as arquivo:
+                clientes = json.load(arquivo)
+                
+            tabela_clientes.setRowCount(len(clientes['clientes']))
+            tabela_clientes.setColumnCount(6)
+            tabela_clientes.setHorizontalHeaderLabels(["Código", "Nome ou razão social", "CPF/CNPJ", "Quantidade de compras", "Valor total de compras", "Ultima compra"])
+
+            for i in range(len(clientes['clientes'])):
+                for j in range(6):
+                    codigo = clientes['clientes'][i]['Codigo do cliente']
+                    nome_razao = clientes['clientes'][i]['Nome ou razao social']
+                    cpf_cnpj = clientes['clientes'][i]['CPF/CNPJ']
+                    qtd_compras = clientes['clientes'][i]['Quantidade de compras']
+                    valor_total = clientes['clientes'][i]['Valor total de compras']
+                    ultima_compra = clientes['clientes'][i]['Ultima compra']
+                    
+                    dados = [codigo, nome_razao, cpf_cnpj, qtd_compras, valor_total, ultima_compra]
+                    
+                    tabela_clientes.setItem(i, j, QTableWidgetItem(str(dados[j])))
+
+            # Centralizar tudo
+            for i in range(len(clientes['clientes'])):
+                for j in range(6):
+                    tabela_clientes.item(i, j).setTextAlignment(Qt.AlignCenter)
+
+            tabela_clientes.setEditTriggers(QTableWidget.NoEditTriggers)
+            tabela_clientes.resizeColumnsToContents()
+            tabela_clientes.setSelectionMode(QAbstractItemView.SingleSelection)
+        
+        def filtrar_clientes():
+            for i in range(tabela_clientes.rowCount()):
+                codigo_cliente = str(tabela_clientes.item(i, 0).text()).upper()
+                nome_razao = str(tabela_clientes.item(i, 1).text()).upper()
+                cpf_cnpj = str(tabela_clientes.item(i, 2).text()).upper()
+                
+                if campo_codnome.text().upper() in codigo_cliente or campo_codnome.text().upper() in nome_razao or campo_codnome.text().upper() in cpf_cnpj:
+                    tabela_clientes.setRowHidden(i, False)
+                else:
+                    tabela_clientes.setRowHidden(i, True) 
+            
+        atualizar_tabela_clientes(self)
+        
+        campo_codnome.textChanged.connect(lambda: filtrar_clientes())
         
 ##############################################################################################################
     ## Funções para manipulação de dados
