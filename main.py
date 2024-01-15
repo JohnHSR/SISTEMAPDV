@@ -1477,6 +1477,7 @@ class MainWindow(QMainWindow):
         botao_remover_acessorio.clicked.connect(lambda: remover_acessorio(self))
         botao_cadastrar_os.clicked.connect(lambda: cadastrar_os(self))
         botao_buscar_cliente.clicked.connect(lambda: buscar_cliente(self))
+        botao_cadastrar_cliente.clicked.connect(lambda: self.atualizar_layout_cadastro_clientes())
         botao_cancelar.clicked.connect(lambda: self.atualizar_layout_nova_os())
     
 ##############################################################################################################
