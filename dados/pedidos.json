@@ -360,6 +360,26 @@
             "Desconto": "R$ 0,00",
             "Acrescimo": "R$ 0,00",
             "Valor total": "R$ 1032,14"
+        },
+        {
+            "Numero do pedido": 18,
+            "Data e hora": "15/01/2024 19:51:17",
+            "Operador": "John",
+            "Cliente": "[2] - FILIPE SILVA",
+            "Produtos": [
+                {
+                    "Codigo do produto": "283530443",
+                    "Nome do produto": "Impressora Laser",
+                    "Quantidade": 1.0,
+                    "Valor Unitario": 567.91,
+                    "Valor Total": "R$ 567,91"
+                }
+            ],
+            "Forma de pagamento": "Credito",
+            "Quantidade de parcelas": 2,
+            "Desconto": "R$ 340,75",
+            "Acrescimo": "R$ 0,00",
+            "Valor total": "R$ 227,16"
         }
     ]
 }

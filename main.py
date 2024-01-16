@@ -2,7 +2,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTableWidget, QMessageBox, QAbstractItemView
 from PySide6.QtCore import Qt, QTimer, QDate
 from PySide6.QtGui import QPixmap
-import sys, json
+import sys, json, unicodedata
 from datetime import timedelta, datetime
 
 
@@ -12,10 +12,6 @@ data_e_hora_atuais = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 operador = "John"
 cliente_padrao = "[1] - Cliente Padrao"
 mensagem_status = f"{data_e_hora_atuais} - Operador: {operador}                          Sistema - Versão {versao} - Em desenvolvimento por: John H."
-
-
-# Definindo o atributo antes de criar a QApplication
-QApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
 
 class MainWindow(QMainWindow):
     
@@ -1219,8 +1215,8 @@ class MainWindow(QMainWindow):
             cliente['Data de cadastro'] = data_e_hora_atuais
             cliente['Quantidade de compras'] = 0
             cliente['Valor total de compras'] = 0
-            cliente['Quantidade de serviços'] = 0
-            cliente['Valor total de serviços'] = 0
+            cliente['Quantidade de servicos'] = 0
+            cliente['Valor total de servicos'] = 0
             cliente['Ultima compra'] = "Nenhuma"
             
             self.lista_cad_clientes.append(cliente)
@@ -1255,7 +1251,6 @@ class MainWindow(QMainWindow):
         self.ui = self.loader.load("Layout/tela_cadastro_os.ui")
         self.setCentralWidget(self.ui)
         self.setWindowTitle("Sistema de Vendas - Nova OS")
-        
         self.config_padrao()
         
         self.acessorios_incluidos = []
@@ -1267,6 +1262,11 @@ class MainWindow(QMainWindow):
         
         responsavel_os = self.ui.os_responsavel
         tipo_aparelho = self.ui.os_tipo_aparelho
+        marca_aparelho = self.ui.os_marca_aparelho
+        modelo_aparelho = self.ui.os_modelo_aparelho
+        
+        
+        
         botao_inserir_acessorio = self.ui.os_inserir_acessorio
         botao_remover_acessorio = self.ui.os_remover_acessorio
         acessorios = self.ui.os_acessorios_adic
@@ -1279,7 +1279,6 @@ class MainWindow(QMainWindow):
         data_previsao = self.ui.os_data_previsao
         
         valor_previsto = self.ui.os_total_previsto
-        
         
         botao_cadastrar_os = self.ui.os_cadastrar_os
         botao_cancelar = self.ui.os_cancelar
@@ -1392,12 +1391,20 @@ class MainWindow(QMainWindow):
         def cadastrar_os(self):
             with open("dados/os.json", "r") as arquivo:
                 os = json.load(arquivo)
-                
+               
             if campo_cliente.text() == "":
                 QMessageBox.warning(self, "Erro", "Selecione um cliente!")
                 return None
             
-            if servico_solicitado.toPlainText() == "":
+            if marca_aparelho.text() == "" or len(marca_aparelho.text()) < 2:
+                QMessageBox.warning(self, "Erro", "Digite a marca do aparelho!")
+                return None
+            
+            if modelo_aparelho.text() == "" or len(modelo_aparelho.text()) < 2:
+                QMessageBox.warning(self, "Erro", "Digite o modelo do aparelho!")
+                return None
+            
+            if servico_solicitado.toPlainText() == "" or len(servico_solicitado.toPlainText()) < 4:
                 QMessageBox.warning(self, "Erro", "Digite o serviço solicitado!")
                 return None
             
@@ -1411,12 +1418,20 @@ class MainWindow(QMainWindow):
                 "Cliente": campo_cliente.text(),
                 "Responsavel": responsavel_os.currentText(),
                 "Tipo de aparelho": tipo_aparelho.currentText(),
+                "Marca do aparelho": marca_aparelho.text(),
+                "Modelo do aparelho": modelo_aparelho.text(),
                 "Acessorios adicionais": acessorios.toPlainText(),
-                "Servico solicitado": servico_solicitado.toPlainText(),
-                "Defeito aparente": defeito_aparente.toPlainText(),
+                "Servico solicitado": self.remover_acentos(servico_solicitado.toPlainText()),
+                "Defeito aparente": self.remover_acentos(defeito_aparente.toPlainText()),
                 "Data de abertura": data_abertura.text(),
                 "Data prevista": data_previsao.text(),
-                "Valor previsto": valor_previsto.text()
+                "Valor previsto": valor_previsto.text(),
+                "Status": "Aberta",
+                "Servicos realizados": [],
+                "Defeito encontrado": "",
+                "Valor final": 0,
+                "Data de fechamento": "",
+                "Observacoes": ""
             })
             
             with open("dados/os.json", "w") as arquivo:
@@ -1578,13 +1593,18 @@ class MainWindow(QMainWindow):
     
     def limpar_pedido_temporario(self):
         with open("dados/pedido_temp.json", "w") as arquivo:
-            json.dump({}, arquivo, indent=4)        
-        
-        
-##############################################################################################################
+            json.dump({}, arquivo, indent=4)
+    
+    def remover_acentos(self, texto):
+        return ''.join(c for c in unicodedata.normalize('NFD', texto) if unicodedata.category(c) != 'Mn')            
+
+    
+
 ##############################################################################################################
 
+##############################################################################################################
 if __name__ == "__main__":
+    QApplication.setAttribute(Qt.AA_ShareOpenGLContexts, True)
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()

@@ -63,7 +63,7 @@
         {
             "Codigo do produto": "283530443",
             "Nome do produto": "Impressora Laser",
-            "Quantidade em estoque": 109,
+            "Quantidade em estoque": 108.0,
             "Quantidade minima": 231,
             "Localizacao do produto": "Y-19",
             "Valor Unitario": 567.91,

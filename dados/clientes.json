@@ -19,6 +19,26 @@
             "Quantidade de servicos": 0,
             "Valor total de servicos": 0,
             "Ultima compra": "15/01/2024 14:28:29"
+        },
+        {
+            "Codigo do cliente": 2,
+            "Nome ou razao social": "FILIPE SILVA",
+            "CPF/CNPJ": "000.111.222-33",
+            "Endereco": "",
+            "Bairro": "",
+            "Cidade": "",
+            "UF": "BA",
+            "CEP": "-",
+            "E-mail": "FILIPE@GMAIL.COM",
+            "Telefone 1": "() -",
+            "Telefone 2": "() -",
+            "Postergar": false,
+            "Data de cadastro": "15/01/2024 19:51:17",
+            "Quantidade de compras": 1,
+            "Valor total de compras": 227.16,
+            "Quantidade de servi\u00e7os": 0,
+            "Valor total de servi\u00e7os": 0,
+            "Ultima compra": "15/01/2024 19:51:17"
         }
     ]
 }
